@@ -10,6 +10,7 @@ import 'package:lol/helpers/routes_helper.dart';
 import 'package:lol/utils/colors.dart';
 import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/customButton.dart';
+import 'package:lol/widget/customDroopdown.dart';
 import 'package:lol/widget/myTextFeildWidget.dart';
 import 'package:lol/widget/showCustomsnackBar.dart';
 
@@ -38,17 +39,23 @@ class _ProfilePageState extends State<ProfilePage> {
     print(authCon.userDetails['contact']);
     print(authCon.userDetails['address']);
     print(authCon.userDetails['qualification']);
+    print(authCon.userDetails['pincode']);
     contactController = TextEditingController(text: authCon.userDetails['contact']??"");
     addressController = TextEditingController(text: authCon.userDetails['address']??"");
+    pinCode = TextEditingController(text: authCon.userDetails['pincode']??"");
     qualificationPassController = TextEditingController(text: authCon.userDetails['qualification']??"");
   }
 
   TextEditingController contactController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController pinCode = TextEditingController();
   TextEditingController editPassController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
   TextEditingController qualificationPassController = TextEditingController();
-
+  List<String> dropdownItemListType = [
+    "Male",
+    "Female",
+  ];
   void _updateProfile(AuthController authController) async {
     print(authController.sigupdata);
 
@@ -73,21 +80,31 @@ class _ProfilePageState extends State<ProfilePage> {
 
       showCustomSnackBar('Edit password and confirm password must be same.', context);
       return;
+    } if (pinCode.text.isEmpty) {
+
+      showCustomSnackBar('Enter pin code number.', context);
+      return;
     } if (qualificationPassController.text.isEmpty) {
 
       showCustomSnackBar('Enter your qualification.', context);
       return;
+    }  if (selectedGender=='') {
+      showCustomSnackBar('Select Gender.', context);
+      return;
     }  else {
-
        authController.addSignupData(
           "email", jsonDecode(userData)['email']);
      authController.addSignupData(
           "id", jsonDecode(userData)['id']);
+     authController.addSignupData(
+          "gender", selectedGender);
       print('validation s');
 
       authController.profile(authController.sigupdata,context);
     }
   }
+  String? selectedGender;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(
@@ -114,13 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Text(
-                  //   'Shalini Chauhan',
-                  //   style: poppinsMedium.copyWith(
-                  //       color: ColorssA.blackColor,
-                  //       fontSize: Dimensions.fontSizeDefault,
-                  //       fontWeight: FontWeight.w500),
-                  // ),
+
                   Text(
                     jsonDecode(userData)['email'],
                     style: TextStyle(color: ColorssA.blackColor),
@@ -154,6 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
           body: FocusDetector(
             onFocusGained: (){
               authController.getProfile();
+              pinCode = TextEditingController(text: authCon.userDetails['pincode']??"");
               contactController = TextEditingController(text: authCon.userDetails['contact']??"");
               addressController = TextEditingController(text: authCon.userDetails['address']??"");
               qualificationPassController = TextEditingController(text: authCon.userDetails['qualification']??"");
@@ -297,7 +309,60 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                         hintText: '',
                         titleText: 'Qualification'),
+
+                     const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Pin Code',
+                      style: TextStyle(
+                          color: ColorssA.blackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    MyTextField(
+                        controller: pinCode,
+                        onTap: () {},
+                        onSubmit: () {},
+                        onChanged: (pincode) {
+                          authController.addSignupData(
+                              "pincode", pincode);
+                        },
+                        hintText: '',textInputType: TextInputType.number,
+                        titleText: 'Pincode'),
                     const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Gender',
+                      style: TextStyle(
+                          color: ColorssA.blackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CustomDropDown(
+                      icon: Container(
+                        margin: EdgeInsets.fromLTRB(30, 0, 20, 29),
+                        child:Text('bll'),
+                      ),
+                      hintText: "Select Gender",
+                      hintStyle: TextStyle(),
+                      items: dropdownItemListType,
+                      contentPadding: EdgeInsets.only(
+                        left: 20 ,
+                        top: 5 ,
+                        bottom: 21,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGender = value; // Update the selected value
+                        });
+                      },
+                    ),
+                     const SizedBox(
                       height: 20,
                     ),
                     Center(

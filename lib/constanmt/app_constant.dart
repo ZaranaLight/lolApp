@@ -10,15 +10,13 @@ class AppConstants {
   static const String ANDROID_VERSION = "android1";
 
   ///API-----------------------------------------------------------
-  // static const String API = "http://192.168.29.32:8000";
-  static const String API = "https://www.rstradlink.com";
+
   static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
   static const String register = 'register';
   static const String login = 'login';
-  static const String update_profile = 'profile';
+  static const String update_profile = 'updateProfile';
   static const String get_profile = 'profile';
-  static const String home = 'home';
-  // static const String profile = 'profile';
+  static const String getAllCategory = 'getAllCategory';
+  // static const String home = 'home';
 
-// static const String COMPANY_RATE = 'company/';
 }

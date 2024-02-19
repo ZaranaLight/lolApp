@@ -21,23 +21,16 @@ class AuthController extends GetxController implements GetxService {
   Map<String, dynamic> get sigupdata => _sigupdata;
   Map<String, dynamic> _sigupdata = {};
 
-  // Map<String, dynamic> get sigupdata => _userdata;
-  // Map<String, dynamic> _sigupdata = {};
-
   String get userID => _userID;
   String _userID = '';
 
   Map<String, dynamic> get userDetails => _userDetails;
   Map<String, dynamic> _userDetails = {};
 
-  Map<String, dynamic> get homeDetails => _homeDetails;
-  Map<String, dynamic> _homeDetails = {};
-
-  List<dynamic> get homeList => _homeList;
-  List<dynamic> _homeList = [];
+  Map<String, dynamic> get catDetails => _catDetails;
+  Map<String, dynamic> _catDetails = {};
 
   String _userData = "";
-
   String get userData => _userData;
 
   void addSignupData(String key, dynamic value) {
@@ -51,7 +44,6 @@ class AuthController extends GetxController implements GetxService {
     update();
     Response response = await authRepo.registration(signUpBody);
     ResponseModel responseModel;
-
     if (response.statusCode == 200) {
       print('resssss=${response.body}');
       print('status=${response.body['status']}');
@@ -128,14 +120,11 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.updateProfile(userProfile);
     ResponseModel responseModel;
     if (response.statusCode == 200) {
-      print("UserUpdate=================");
-      print(response.body);
       if (response.body['status'] == false) {
         showCustomSnackBar(response.body['error'], context, isError: true);
-      } else if (response.body['status'] == 200) {
-        showCustomSnackBar(response.body['message'], context, isError: true);
+      } else if (response.body['status'] == 200 || response.body['status'] == true) {
+        showCustomSnackBar('Profile Updated Succefully', context, isError: false);
       }
-
       responseModel =
           ResponseModel(true, '${response.body['message']}', response.body);
     } else {
@@ -153,29 +142,87 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.getProfile(jsonDecode(userData)['id']);
     if (response.statusCode == 200) {
       _userDetails = response.body['user'];
-print('chaec=======${_userDetails}');
       update();
     } else {}
     _isLoading = false;
     update();
   }
 
-  Future<void> getHome() async {
-    print('home getHome=-=== }');
+  // Future<void> getHome() async {
+  //   print('home getHome=-=== }');
+  //   _isLoading = true;
+  //   update();
+  //   Response response = await authRepo.getHome();
+  //
+  //   if (response.statusCode == 200) {
+  //     if(response.body['status']==200){
+  //       _homeDetails = response.body;
+  //       _homeList = response.body['result'];
+  //       print('home list=-===${_homeList}');
+  //     }
+  //
+  //     update();
+  //   } else {}
+  //   _isLoading = false;
+  //   update();
+  // }
+  List  _catList = [];
+
+  List  get catList => _catList;
+
+  Map<String, dynamic> get catDropdown =>
+      _catDropdown;
+  Map<String, dynamic> _catDropdown = {};
+
+  String get catDropdownvalue => _catDropdownvalue;
+  String _catDropdownvalue = 'Select Type';
+
+  setCategoryDropdownDetail(BuildContext context, String id, category_name,status) {
+    _catDropdown['id'] = id;
+    _catDropdown['category_name'] = category_name;
+    _catDropdown['status'] = status;
+    update();
+  }
+
+  setCatVal(String newVal){
+    print('newnal-------${newVal}');
+    _catDropdownvalue=newVal;
+    update();
+  }
+  addDropdowndata(String key, dynamic value) {
+    _catDropdown[key] = value;
+    update();
+  }
+  Map<String, dynamic> get selectedEnterpriseList => _selectedEnterpriseList;
+  Map<String, dynamic> _selectedEnterpriseList = {};
+  List<dynamic> _specialist = [];
+  List<dynamic> get specialist => _specialist;
+  Future<void> getCategory() async {
     _isLoading = true;
     update();
-    Response response = await authRepo.getHome();
-    print('response.statusCode -=== ${response.statusCode }');
-    print('response.statusCode -=== ${response.body }');
-
+    Response response = await authRepo.getCategory();
     if (response.statusCode == 200) {
-      if(response.body['status']==200){
-        _homeDetails = response.body;
-        _homeList = response.body['result'];
-        print('home list=-===${_homeList}');
+      if(response.body['status']==true){
+        _catDetails = response.body;
+        print('_catDetails===${_catDetails}');
+        List<String> items = [];
+        List<String> idList = [];
+        for (var element in _catDetails['data']) {
+          items.add(element["category_name"]);
+        }
+        for (var element in  _catDetails['data']) {
+          idList.add(element["id"].toString());
+        }
+        _selectedEnterpriseList['category_name']=items;
+        _selectedEnterpriseList['id']=idList;
+        _catList=items;
+
+        print('items===${items}');
+        print('_catList===${_catList}');
+
+        update();
       }
 
-      update();
     } else {}
     _isLoading = false;
     update();
@@ -186,10 +233,9 @@ print('chaec=======${_userDetails}');
   }
 
   clearsigupdata() async {
-
     _userData = '';
     _sigupdata = {};
-    _homeDetails = {};
+    _catDetails = {};
     update();
   }
 }

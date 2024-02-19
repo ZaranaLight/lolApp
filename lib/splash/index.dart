@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (data != '') {
         mail =  authCon.authRepo.getUserMail();
         print('mail========${mail}');
-        authCon.getHome();
+        // authCon.getHome();
         Get.offNamed(RouteHelper.getDashboard());
 
       } else {

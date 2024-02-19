@@ -1,13 +1,47 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lol/utils/colors.dart';
 import 'package:lol/utils/dimentions.dart';
 import 'package:lol/utils/images.dart';
 import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/customButton.dart';
 
-class CreatePost extends StatelessWidget {
-  const CreatePost({super.key});
+class CreatePost extends StatefulWidget {
+    CreatePost({super.key});
+
+  @override
+  State<CreatePost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
+  File? pickedImage;
+  bool picked= false;
+  Future pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery,imageQuality: 80);
+    if (pickedFile != null) {
+      File imageFile = File(pickedFile.path);
+
+      // pickedImage = imageFile;
+      setState(() {
+        pickedImage = imageFile;
+        picked = true;
+        // catalougeUploadImage(pickedImage!);
+      });
+      //  return imageFile;
+    }else{
+      picked = false;
+    }
+    //else{
+    // throw "null";
+    // }
+
+  }
+
+TextEditingController descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,30 +119,44 @@ class CreatePost extends StatelessWidget {
                     ),
                     Container(
                       height: Get.height * 0.5,
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                      padding: EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15)),
-                      child: Column(
+                      child:   Column(
                         children: [
                           TextField(
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 hintText: 'Write here...',
-                                enabledBorder: InputBorder.none),
+                                enabledBorder: InputBorder.none),controller: descController,
                           ),
-                          Spacer(),
                           Container(
-                            child: Row(
-                              children: [
-                                Icon(Icons.photo),
-                                Icon(Icons.slow_motion_video),
-                                Icon(Icons.gif_box_outlined),
-                                Icon(Icons.music_note),
-                                Spacer(),
-                                Icon(Icons.emoji_emotions_outlined),
-                              ],
-                            ),
+                              child: pickedImage==null ? Center(child: Text('pick'),):
+                              Container(
+                                child: Center(
+                                  child: Image.file(
+                                    File(pickedImage!.path).absolute,
+                                    height: 80,
+                                    width: 80, fit: BoxFit.fill,
+                                  ),
+                                ),
+                              )
+                          ),
+                          const Spacer(),
+                           Row(
+                            children: [
+                              InkWell(
+                                  onTap: (){
+                                    pickImage();
+                                  },
+                                  child: Icon(Icons.photo)),
+                              Icon(Icons.slow_motion_video),
+                              Icon(Icons.gif_box_outlined),
+                              Icon(Icons.music_note),
+                              Spacer(),
+                              Icon(Icons.emoji_emotions_outlined),
+                            ],
                           ),
                         ],
                       ),
@@ -122,10 +170,10 @@ class CreatePost extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('Post Privacy'),
-                          SizedBox(width: 15,),
+                          const Text('Post Privacy'),
+                          const SizedBox(width: 15,),
                           Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 5),
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -133,7 +181,7 @@ class CreatePost extends StatelessWidget {
                                     color: Colors.black,
                                   ),
                                   borderRadius: BorderRadius.circular(5)),
-                              child: Row(
+                              child: const Row(
                                 children: [
                                   Text('Public'),
                                   Icon(Icons.arrow_drop_down_sharp)

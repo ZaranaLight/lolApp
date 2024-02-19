@@ -35,7 +35,7 @@ class _BottomNavigationBarExampleState
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const CreatePost(),
+      CreatePost(),
     const ProfilePage(),
   ];
 

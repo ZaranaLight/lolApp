@@ -30,6 +30,8 @@ class AuthRepo {
           "edit_password": profileData['edit_password'],
           "confirm_password": profileData['confirm_password'],
           "qualification": profileData['qualification'],
+          "pincode": profileData['pincode'],
+          "gender": profileData['gender'],
           "id": profileData['id'],
           "email": profileData['email'],
         });
@@ -39,9 +41,9 @@ class AuthRepo {
     return await apiClient.getData(
         '${AppConstants.get_profile}?id=${userId}');
   }
-  Future<Response> getHome(  ) async {
+  Future<Response> getCategory() async {
     return await apiClient.getData(
-        AppConstants.home);
+        '${AppConstants.getAllCategory}');
   }
 
   Future<bool> saveMAil(String email) async {
