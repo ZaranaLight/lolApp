@@ -19,52 +19,70 @@ class AuthRepo {
 
   Future<Response> login(
       {required String email, required String password}) async {
-    return await apiClient.postData(
-        AppConstants.login, {"email": email, "password": password});
-  }
-  Future<Response> updateProfile(Map<String,dynamic> profileData) async {
-    return await apiClient.postData(
-        AppConstants.update_profile, {
-          "contact": profileData['contact'],
-          "address": profileData['address'],
-          "edit_password": profileData['edit_password'],
-          "confirm_password": profileData['confirm_password'],
-          "qualification": profileData['qualification'],
-          "pincode": profileData['pincode'],
-          "gender": profileData['gender'],
-          "id": profileData['id'],
-          "email": profileData['email'],
-        });
+    return await apiClient
+        .postData(AppConstants.login, {"email": email, "password": password});
   }
 
-  Future<Response> getProfile(  int userId) async {
-    return await apiClient.getData(
-        '${AppConstants.get_profile}?id=${userId}');
+  Future<Response> updateProfile(Map<String, dynamic> profileData) async {
+    return await apiClient.postData(AppConstants.update_profile, {
+      "contact": profileData['contact'],
+      "address": profileData['address'],
+      "edit_password": profileData['edit_password'],
+      "confirm_password": profileData['confirm_password'],
+      "qualification": profileData['qualification'],
+      "pincode": profileData['pincode'],
+      "gender": profileData['gender'],
+      "id": profileData['id'],
+      "email": profileData['email'],
+    });
   }
+
+  Future<Response> uploadPost(Map<String, dynamic> postDetail) async {
+    return await apiClient.postData(AppConstants.uploadPost, {
+      "id": postDetail['id'],
+      "c_id": postDetail['c_id'],
+      "title": postDetail['title'],
+    });
+  }
+
+  Future<Response> getProfile(int userId) async {
+    return await apiClient.getData('${AppConstants.get_profile}?id=${userId}');
+  }
+
+  Future<Response> getAllPosts(int userId) async {
+    return await apiClient.getData('${AppConstants.getAllPosts}');
+  }
+
   Future<Response> getCategory() async {
-    return await apiClient.getData(
-        '${AppConstants.getAllCategory}');
+    return await apiClient.getData('${AppConstants.getAllCategory}');
   }
 
   Future<bool> saveMAil(String email) async {
     return sharedPreferences.setString(AppConstants.EMAIL, email);
   }
+
   String getUserMail() {
     return sharedPreferences.getString(AppConstants.EMAIL) ?? "";
   }
+
   Future<bool> saveUserDetails(String userdetails) async {
     return sharedPreferences.setString(AppConstants.USER_DETAILS, userdetails);
   }
+
   String getUserDetail() {
     return sharedPreferences.getString(AppConstants.USER_DETAILS) ?? "";
   }
+
   bool clearSharedData() {
     sharedPreferences.remove(AppConstants.TOKEN);
     sharedPreferences.remove(AppConstants.USER_DETAILS);
     sharedPreferences.remove(AppConstants.EMAIL);
     apiClient.token = null;
     apiClient.reToken = null;
-    apiClient.updateHeader("", "", );
+    apiClient.updateHeader(
+      "",
+      "",
+    );
     return true;
   }
 }

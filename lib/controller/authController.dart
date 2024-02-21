@@ -21,6 +21,9 @@ class AuthController extends GetxController implements GetxService {
   Map<String, dynamic> get sigupdata => _sigupdata;
   Map<String, dynamic> _sigupdata = {};
 
+  Map<String, dynamic> get postData => _postData;
+  Map<String, dynamic> _postData = {};
+
   String get userID => _userID;
   String _userID = '';
 
@@ -35,6 +38,10 @@ class AuthController extends GetxController implements GetxService {
 
   void addSignupData(String key, dynamic value) {
     _sigupdata[key] = value;
+    update();
+  }
+  void addPostData(String key, dynamic value) {
+    _postData[key] = value;
     update();
   }
 
@@ -135,11 +142,50 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
+
+  Future<ResponseModel> uploadPost(
+      Map<String, dynamic> postDetail, BuildContext context) async {
+    var userData = authRepo.getUserDetail();
+    print('userData==============${jsonDecode(userData)}');
+    print('postDetail==============${postDetail}');
+    postDetail['id']=jsonDecode(userData)['id'];
+    _isLoading = true;
+    update();
+    Response response = await authRepo.uploadPost(postDetail);
+    ResponseModel responseModel;
+    if (response.statusCode == 200) {
+      if (response.body['status'] == false) {
+        showCustomSnackBar(response.body['error'], context, isError: true);
+      } else if (response.body['status'] == 200 || response.body['status'] == true) {
+        showCustomSnackBar('Profile Updated Succefully', context, isError: false);
+      }
+      responseModel =
+          ResponseModel(true, '${response.body['message']}', response.body);
+    } else {
+      responseModel = ResponseModel(false, response.statusText!, {});
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
   Future<void> getProfile() async {
     var userData = authRepo.getUserDetail();
     _isLoading = true;
     update();
     Response response = await authRepo.getProfile(jsonDecode(userData)['id']);
+    if (response.statusCode == 200) {
+      _userDetails = response.body['user'];
+      update();
+    } else {}
+    _isLoading = false;
+    update();
+  }
+  Future<void> getAllPosts() async {
+    var userData = authRepo.getUserDetail();
+    _isLoading = true;
+    update();
+    Response response = await authRepo.getAllPosts(jsonDecode(userData)['id']);
     if (response.statusCode == 200) {
       _userDetails = response.body['user'];
       update();
