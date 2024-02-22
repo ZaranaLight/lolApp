@@ -7,11 +7,13 @@ class AppConstants {
   static const String LANGUAGE_CODE = 'language_code';
   static const String USER_DETAILS = 'user_data';
   static const String USER_IMAGE = 'user_image';
+  static const String INTRO = 'intro';
   static const String ANDROID_VERSION = "android1";
 
   ///API-----------------------------------------------------------
 
   static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
+  static const String IMAGE_URL = 'https://mcq.codingbandar.com/front/assets/posts/';
   static const String register = 'register';
   static const String login = 'login';
   static const String update_profile = 'updateProfile';

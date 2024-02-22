@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:lol/constanmt/app_constant.dart';
 import 'package:lol/controller/authController.dart';
+import 'package:lol/utils/appConstants.dart';
 import 'package:lol/utils/colors.dart';
 import 'package:lol/utils/dimentions.dart';
 import 'package:lol/utils/images.dart';
@@ -21,8 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var authCon = Get.find<AuthController>();
 
   String SelectNEFTStatusTypeTitle = "Select Type";
-  showCatDropdown(
-      BuildContext context, AuthController authController) {
+
+  showCatDropdown(BuildContext context, AuthController authController) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -32,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         builder: (context) {
           return ListView(
-              physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
@@ -41,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       child: Text(
                         'Select Type Title',
                         textAlign: TextAlign.center,
@@ -61,47 +64,52 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Column(
                     children: authController.catDetails['data'].map((entry) {
-                      return ListTile(
-                        leading: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50), ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Icon(
-                              Icons.circle_rounded,
-                              color:   Theme.of(context).primaryColor,
-                              size: 15,
-                            ),
-                          ),
+                  return ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Icon(
+                          Icons.circle_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 15,
                         ),
-                        title: Text(entry['text'],style: TextStyle(color:  Theme.of(context).hintColor),),
-                        onTap: () {
-                          if (SelectNEFTStatusTypeTitle == "Select Status") {
-                            authController.setCatVal(entry['category_name']);
+                      ),
+                    ),
+                    title: Text(
+                      entry['text'],
+                      style: TextStyle(color: Theme.of(context).hintColor),
+                    ),
+                    onTap: () {
+                      if (SelectNEFTStatusTypeTitle == "Select Status") {
+                        authController.setCatVal(entry['category_name']);
 
-                            authController.setCategoryDropdownDetail(
-                                context, entry['category_name'], entry['id'], entry['status']);
-                            authController.addDropdowndata(
-                              'category_name',
-                              entry['category_name'],
-                            );
-                            authController.addDropdowndata(
-                              'id',
-                              entry['id'],
-                            );
-                            authController.addDropdowndata(
-                              'status',
-                              entry['status'],
-                            );
-                          }
+                        authController.setCategoryDropdownDetail(
+                            context,
+                            entry['category_name'],
+                            entry['id'],
+                            entry['status']);
+                        authController.addDropdowndata(
+                          'category_name',
+                          entry['category_name'],
+                        );
+                        authController.addDropdowndata(
+                          'id',
+                          entry['id'],
+                        );
+                        authController.addDropdowndata(
+                          'status',
+                          entry['status'],
+                        );
+                      }
 
-
-
-                          Get.back();
-                          // showNEFTFilterPopup(context);
-                        },
-                      );
-                    }).toList())
+                      Get.back();
+                      // showNEFTFilterPopup(context);
+                    },
+                  );
+                }).toList())
               ]);
         });
   }
@@ -116,15 +124,15 @@ class _HomeScreenState extends State<HomeScreen> {
       //   authCon.getCategory();
       // }
       authCon.getCategory();
+      authCon.getAllPosts();
     });
   }
 
-List selecterArray = [];
+  List selecterArray = [];
   List<String> _items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
   String _selectedItem = 'Item 1';
 
-  showFilterInPopUp( BuildContext context,
-      {  required Widget child}) {
+  showFilterInPopUp(BuildContext context, {required Widget child}) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -145,19 +153,19 @@ List selecterArray = [];
   }
 
   String SelectTypeTitle = "Select Type";
-  showCustomerDropdown(
-      BuildContext context, AuthController companyController) {
+
+  showCustomerDropdown(BuildContext context, AuthController companyController) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
         ),
-        backgroundColor:Colors.white,
+        backgroundColor: Colors.white,
         builder: (context) {
           return ListView(
-              physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               children: [
                 Column(
                   mainAxisSize: MainAxisSize.min,
@@ -165,7 +173,8 @@ List selecterArray = [];
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      margin:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       child: Text(
                         'Select Type Title',
                         textAlign: TextAlign.center,
@@ -184,49 +193,50 @@ List selecterArray = [];
                   ],
                 ),
                 Column(
-                    children: companyController.catList.map ((entry) {
-                      // Map<String, dynamic> data = entry.value;
+                    children: companyController.catList.map((entry) {
+                  // Map<String, dynamic> data = entry.value;
 
-                      return ListTile(
-                        leading: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: Colors.red)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Icon(
-                              Icons.circle_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 15,
-                            ),
-                          ),
+                  return ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.red)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Icon(
+                          Icons.circle_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 15,
                         ),
-                        title: Text(entry),
-                        onTap: () {
-                          print('SelectTypeTitle----${SelectTypeTitle}');
-                          print('entry----${entry}');
-                          if (SelectTypeTitle == "Select Type") {
-                            companyController.setCatVal(entry);
-                            // companyController.setCategoryDropdownDetail(
-                            //     context, entry['category_name'], entry['id'], entry['status']);
-                            companyController.addDropdowndata(
-                              'category_name',
-                              entry,
-                            );
-                            // companyController.addDropdowndata(
-                            //   'id',
-                            //   entry['id'],
-                            // );
-                          }
+                      ),
+                    ),
+                    title: Text(entry),
+                    onTap: () {
+                      print('SelectTypeTitle----${SelectTypeTitle}');
+                      print('entry----${entry}');
+                      if (SelectTypeTitle == "Select Type") {
+                        companyController.setCatVal(entry);
+                        // companyController.setCategoryDropdownDetail(
+                        //     context, entry['category_name'], entry['id'], entry['status']);
+                        companyController.addDropdowndata(
+                          'category_name',
+                          entry,
+                        );
+                        // companyController.addDropdowndata(
+                        //   'id',
+                        //   entry['id'],
+                        // );
+                      }
 
-                          Get.back();
-                          // showNEFTFilterPopup(context);
-                        },
-                      );
-                    }).toList())
+                      Get.back();
+                      // showNEFTFilterPopup(context);
+                    },
+                  );
+                }).toList())
               ]);
         });
   }
+
   showNEFTFilterPopup(BuildContext context) {
     return showFilterInPopUp(
       context,
@@ -237,7 +247,7 @@ List selecterArray = [];
             padding: const EdgeInsets.all(12),
             width: Get.width,
             decoration: BoxDecoration(
-             color: Colors.white,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -278,25 +288,20 @@ List selecterArray = [];
                     color: Theme.of(context).primaryColor,
                     thickness: 2,
                   ),
-
-
-
                   Container(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
-
-                        StatefulBuilder(builder: (BuildContext context, setState) {
+                        StatefulBuilder(
+                            builder: (BuildContext context, setState) {
                           return InkWell(
                             onTap: () {
                               print('hi--------');
                               print(authController.catDropdownvalue);
                               setState(() {
                                 SelectTypeTitle = "Select Type";
-                                selecterArray =
-                                    authController.catList;
+                                selecterArray = authController.catList;
                               });
                               Get.back();
                               showCustomerDropdown(context, authController);
@@ -305,19 +310,14 @@ List selecterArray = [];
                               margin: const EdgeInsets.symmetric(horizontal: 0),
                               child: DropdownTextFiled(
                                 isFlagList: false,
-                                isSelected:
-                                authController.catDropdownvalue != '' &&
-                                    authController
-                                        .catDropdownvalue !=
-                                        ""
+                                isSelected: authController.catDropdownvalue !=
+                                            '' &&
+                                        authController.catDropdownvalue != ""
                                     ? true
                                     : false,
                                 depth: true,
-
-                                hint: authController.catDropdownvalue !=
-                                    '' &&
-                                    authController.catDropdownvalue !=
-                                        ""
+                                hint: authController.catDropdownvalue != '' &&
+                                        authController.catDropdownvalue != ""
                                     ? authController.catDropdownvalue
                                     : "Select Type",
                                 onChanged: (value) {
@@ -339,16 +339,12 @@ List selecterArray = [];
                   const SizedBox(
                     height: 30,
                   ),
-
-
-
                 ],
               ),
             ),
           );
         });
-      }
-      ),
+      }),
     );
   }
 
@@ -399,11 +395,9 @@ List selecterArray = [];
                               ),
                             ],
                           )),
-
-
                       InkWell(
-                        onTap: (){
-                        showNEFTFilterPopup(context);
+                        onTap: () {
+                          showNEFTFilterPopup(context);
                         },
                         child: Container(
                           width: Get.width * 0.3,
@@ -416,7 +410,10 @@ List selecterArray = [];
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Text(
-                                 authController.catDropdownvalue=='Select Type'?'Categories':authController.catDropdownvalue ,
+                                  authController.catDropdownvalue ==
+                                          'Select Type'
+                                      ? 'Categories'
+                                      : authController.catDropdownvalue,
                                   style: TextStyle(color: ColorssA.whiteColor),
                                 ),
                                 Icon(
@@ -428,33 +425,18 @@ List selecterArray = [];
                           ),
                         ),
                       ),
-
-                      // Center(
-                      //   child: DropdownButton<String>(
-                      //     value: _selectedItem,
-                      //     onChanged: (String? newValue) {
-                      //       setState(() {
-                      //         _selectedItem = newValue!;
-                      //       });
-                      //     },
-                      //     items: _items.map<DropdownMenuItem<String>>((String value) {
-                      //       return DropdownMenuItem<String>(
-                      //         value: value,
-                      //         child: Text(value),
-                      //       );
-                      //     }).toList(),
-                      //   ),
-                      // )
                     ],
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   ListView.builder(
-                    itemCount: 3,
+                    itemCount: authController.postList.length,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
+
+
                       return Container(
                         height: Get.height * 0.475,
                         margin: EdgeInsets.only(bottom: 15),
@@ -485,11 +467,11 @@ List selecterArray = [];
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(50),
                                         color: ColorssA.dialpgColor),
-                                    child: Image.asset(
-                                      Images.bio,
-                                      width: 50,
-                                      height: 50,
-                                    ),
+                                    child:  Image.asset(
+                                            Images.bio,
+                                            width: 50,
+                                            height: 50,
+                                          ),
                                   ),
                                   Container(
                                     padding:
@@ -531,18 +513,27 @@ List selecterArray = [];
                             //   width: Get.width,
                             //   height: 200,),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15,vertical: 20),
-                              child: Center(
-                                child: Text(
-                                  // authController.homeList[index]['text']??"",
-'kk',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,fontStyle: FontStyle.italic),
-                                ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Text(
+                                authController.postList[index]['title'] ?? "",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    fontStyle: FontStyle.italic),
                               ),
                             ),
+                            authController.postList[index]
+                            ['file'] !=
+                                ''
+                                ? Image.network(
+                              AppConstants.IMAGE_URL+ authController.postList[index]
+                              ['file'],
+                              width: Get.width,fit: BoxFit.fill,
+                              height: Get.height*0.27,
+                            )
+                                :Container(),
                             // Image.file(File(authController.homeList[index]['file'])),
 
                             Spacer(),

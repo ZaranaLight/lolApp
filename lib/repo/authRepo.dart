@@ -42,6 +42,8 @@ class AuthRepo {
       "id": postDetail['id'],
       "c_id": postDetail['c_id'],
       "title": postDetail['title'],
+      "file": postDetail['file'],
+      "user_id": postDetail['id'],
     });
   }
 

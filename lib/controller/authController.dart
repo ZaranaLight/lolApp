@@ -33,6 +33,12 @@ class AuthController extends GetxController implements GetxService {
   Map<String, dynamic> get catDetails => _catDetails;
   Map<String, dynamic> _catDetails = {};
 
+
+  Map<String, dynamic> get postDetails => _postDetails;
+  Map<String, dynamic> _postDetails = {};
+  List<dynamic> get postList => _postList;
+  List<dynamic> _postList =[];
+
   String _userData = "";
   String get userData => _userData;
 
@@ -146,8 +152,7 @@ class AuthController extends GetxController implements GetxService {
   Future<ResponseModel> uploadPost(
       Map<String, dynamic> postDetail, BuildContext context) async {
     var userData = authRepo.getUserDetail();
-    print('userData==============${jsonDecode(userData)}');
-    print('postDetail==============${postDetail}');
+
     postDetail['id']=jsonDecode(userData)['id'];
     _isLoading = true;
     update();
@@ -187,7 +192,8 @@ class AuthController extends GetxController implements GetxService {
     update();
     Response response = await authRepo.getAllPosts(jsonDecode(userData)['id']);
     if (response.statusCode == 200) {
-      _userDetails = response.body['user'];
+      _postDetails = response.body ;
+      _postList = response.body['data'] ;
       update();
     } else {}
     _isLoading = false;
