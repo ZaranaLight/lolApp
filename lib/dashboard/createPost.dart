@@ -12,6 +12,7 @@ import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/customButton.dart';
 import 'package:lol/widget/dropDownWidget.dart';
 import 'package:lol/widget/showCustomsnackBar.dart';
+import 'package:video_player/video_player.dart';
 
 class CreatePost extends StatefulWidget {
   CreatePost({super.key});
@@ -34,7 +35,6 @@ class _CreatePostState extends State<CreatePost> {
       // pickedImage = imageFile;
       setState(() {
         pickedImage = imageFile;
-
 
         print('imageFilepath------------${imageFile}');
         picked = true;
@@ -64,7 +64,7 @@ class _CreatePostState extends State<CreatePost> {
       authController.addPostData('c_id', '1');
       authController.addPostData('id', jsonDecode(userData)['id']);
       authController.addPostData('title', descController.text);
-      authController.addPostData('file',pickedImage?.path);
+      authController.addPostData('file', pickedImage?.path);
       authController.uploadPost(authController.postData, context);
     }
   }
@@ -88,9 +88,9 @@ class _CreatePostState extends State<CreatePost> {
           );
         });
   }
+
   List selecterArray = [];
   String SelectTypeTitle = "Select Type";
-
 
   showCustomerDropdown(BuildContext context, AuthController companyController) {
     showModalBottomSheet(
@@ -112,7 +112,7 @@ class _CreatePostState extends State<CreatePost> {
                   children: <Widget>[
                     Container(
                       margin:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                       child: Text(
                         'Select Type Title',
                         textAlign: TextAlign.center,
@@ -132,49 +132,62 @@ class _CreatePostState extends State<CreatePost> {
                 ),
                 Column(
                     children: companyController.catList.map((entry) {
-                      // Map<String, dynamic> data = entry.value;
+                  // Map<String, dynamic> data = entry.value;
 
-                      return ListTile(
-                        leading: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: Colors.red)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Icon(
-                              Icons.circle_rounded,
-                              color: Theme.of(context).primaryColor,
-                              size: 15,
-                            ),
-                          ),
+                  return ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(color: Colors.red)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Icon(
+                          Icons.circle_rounded,
+                          color: Theme.of(context).primaryColor,
+                          size: 15,
                         ),
-                        title: Text(entry),
-                        onTap: () {
-                          print('SelectTypeTitle----${SelectTypeTitle}');
-                          print('entry----${entry}');
-                          if (SelectTypeTitle == "Select Type") {
-                            companyController.setCatVal(entry);
-                            // companyController.setCategoryDropdownDetail(
-                            //     context, entry['category_name'], entry['id'], entry['status']);
-                            companyController.addDropdowndata(
-                              'category_name',
-                              entry,
-                            );
-                            // companyController.addDropdowndata(
-                            //   'id',
-                            //   entry['id'],
-                            // );
-                          }
+                      ),
+                    ),
+                    title: Text(entry),
+                    onTap: () {
+                      print('SelectTypeTitle----${SelectTypeTitle}');
+                      print('entry----${entry}');
+                      if (SelectTypeTitle == "Select Type") {
+                        companyController.setCatVal(entry);
+                        // companyController.setCategoryDropdownDetail(
+                        //     context, entry['category_name'], entry['id'], entry['status']);
+                        companyController.addDropdowndata(
+                          'category_name',
+                          entry,
+                        );
+                        // companyController.addDropdowndata(
+                        //   'id',
+                        //   entry['id'],
+                        // );
+                      }
 
-                          Get.back();
-                          // showNEFTFilterPopup(context);
-                        },
-                      );
-                    }).toList())
+                      Get.back();
+                      // showNEFTFilterPopup(context);
+                    },
+                  );
+                }).toList())
               ]);
         });
   }
 
+  VideoPlayerController? _videoPlayerController;
+  File? _video;
+  final piker = ImagePicker();
+
+  _pickVideo() async {
+    final video = await piker.pickVideo(source: ImageSource.gallery);
+    _video = File(video!.path);
+    _videoPlayerController = VideoPlayerController.file(_video!)
+      ..initialize().then((value) {
+        setState(() {});
+        _videoPlayerController?.play();
+      });
+  }
 
   showNEFTFilterPopup(BuildContext context) {
     return showFilterInPopUp(
@@ -234,44 +247,44 @@ class _CreatePostState extends State<CreatePost> {
                       children: [
                         StatefulBuilder(
                             builder: (BuildContext context, setState) {
-                              return InkWell(
-                                onTap: () {
-                                  print('hi--------');
-                                  print(authController.catDropdownvalue);
+                          return InkWell(
+                            onTap: () {
+                              print('hi--------');
+                              print(authController.catDropdownvalue);
+                              setState(() {
+                                SelectTypeTitle = "Select Type";
+                                selecterArray = authController.catList;
+                              });
+                              Get.back();
+                              showCustomerDropdown(context, authController);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 0),
+                              child: DropdownTextFiled(
+                                isFlagList: false,
+                                isSelected: authController.catDropdownvalue !=
+                                            '' &&
+                                        authController.catDropdownvalue != ""
+                                    ? true
+                                    : false,
+                                depth: true,
+                                hint: authController.catDropdownvalue != '' &&
+                                        authController.catDropdownvalue != ""
+                                    ? authController.catDropdownvalue
+                                    : "Select Type",
+                                onChanged: (value) {
                                   setState(() {
-                                    SelectTypeTitle = "Select Type";
-                                    selecterArray = authController.catList;
+                                    SelectTypeTitle = value;
+                                    authController.addDropdowndata(
+                                        "category_name", SelectTypeTitle);
+                                    authController.setCatVal(
+                                        authController.catDropdownvalue);
                                   });
-                                  Get.back();
-                                  showCustomerDropdown(context, authController);
                                 },
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 0),
-                                  child: DropdownTextFiled(
-                                    isFlagList: false,
-                                    isSelected: authController.catDropdownvalue !=
-                                        '' &&
-                                        authController.catDropdownvalue != ""
-                                        ? true
-                                        : false,
-                                    depth: true,
-                                    hint: authController.catDropdownvalue != '' &&
-                                        authController.catDropdownvalue != ""
-                                        ? authController.catDropdownvalue
-                                        : "Select Type",
-                                    onChanged: (value) {
-                                      setState(() {
-                                        SelectTypeTitle = value;
-                                        authController.addDropdowndata(
-                                            "category_name", SelectTypeTitle);
-                                        authController.setCatVal(
-                                            authController.catDropdownvalue);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              );
-                            }),
+                              ),
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   ),
@@ -333,7 +346,7 @@ class _CreatePostState extends State<CreatePost> {
                           Container(
                             width: 50,
                             height: 50,
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50),
@@ -374,9 +387,16 @@ class _CreatePostState extends State<CreatePost> {
                           children: [
                             Row(
                               children: [
-                                Text('Select Category', style: TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.w600),),
-SizedBox(width: 20,),
-
+                                const Text(
+                                  'Select Category',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: InkWell(
@@ -388,17 +408,21 @@ SizedBox(width: 20,),
                                       height: 40,
                                       decoration: BoxDecoration(
                                           gradient: ColorssA.AppLinears,
-                                          borderRadius: BorderRadius.circular(10)),
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       child: Center(
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             Text(
                                               authController.catDropdownvalue ==
-                                                  'Select Type'
+                                                      'Select Type'
                                                   ? 'Categories'
-                                                  : authController.catDropdownvalue,
-                                              style: TextStyle(color: ColorssA.whiteColor),
+                                                  : authController
+                                                      .catDropdownvalue,
+                                              style: TextStyle(
+                                                  color: ColorssA.whiteColor),
                                             ),
                                             Icon(
                                               Icons.arrow_drop_down_rounded,
@@ -423,7 +447,7 @@ SizedBox(width: 20,),
                             ),
                             const Spacer(),
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 pickImage(authController);
                               },
                               child: Container(
@@ -451,6 +475,38 @@ SizedBox(width: 20,),
                                             fit: BoxFit.fill,
                                           ),
                                         )),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                _pickVideo();
+                              },
+                              child: Container(
+                                  child: _video == null
+                                      ? const Column(
+                                          children: [
+                                            Center(
+                                              child: Icon(
+                                                Icons.cloud_upload,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Upload Here..',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            )
+                                          ],
+                                        )
+                                      : _videoPlayerController!
+                                              .value.isInitialized
+                                          ? AspectRatio(
+                                              aspectRatio:
+                                                  _videoPlayerController!
+                                                      .value.aspectRatio,
+                                              child: VideoPlayer(
+                                                  _videoPlayerController!),
+                                            )
+                                          : Container()),
                             ),
                             const Spacer(),
                             Row(
