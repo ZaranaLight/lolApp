@@ -156,7 +156,7 @@ class AuthController extends GetxController implements GetxService {
     postDetail['id']=jsonDecode(userData)['id'];
     _isLoading = true;
     update();
-    Response response = await authRepo.uploadPost(postDetail);
+    Response response = (await authRepo.uploadPost(postDetail)) as Response;
     ResponseModel responseModel;
     if (response.statusCode == 200) {
       if (response.body['status'] == false) {

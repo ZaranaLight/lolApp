@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lol/constanmt/app_constant.dart';
 import 'package:lol/controller/authController.dart';
 import 'package:lol/helpers/routes_helper.dart';
@@ -104,7 +106,33 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
   String? selectedGender;
+  File? pickedImage;
+  bool picked = false;
 
+  Future pickImage(AuthController authController) async {
+    final ImagePicker picker = ImagePicker();
+    final pickedFile =
+    await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    if (pickedFile != null) {
+      File imageFile = File(pickedFile.path);
+
+      // pickedImage = imageFile;
+      setState(() {
+        pickedImage = imageFile;
+
+        print('imageFilepath------------${imageFile}');
+        picked = true;
+
+        // catalougeUploadImage(pickedImage!);
+      });
+      //  return imageFile;
+    } else {
+      picked = false;
+    }
+    //else{
+    // throw "null";
+    // }
+  }
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(
@@ -116,13 +144,26 @@ class _ProfilePageState extends State<ProfilePage> {
             automaticallyImplyLeading: false,
             actions: [
             SizedBox(width: 15,),
-              Container(
-                padding: EdgeInsets.all(17),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: ColorssA.dialpgColor.withOpacity(0.3),
+              InkWell(
+                onTap: (){
+                  pickImage(authController);
+                },
+                child: Container(
+                  // padding: EdgeInsets.all(17),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: ColorssA.dialpgColor.withOpacity(0.3),
+                  ),
+                  child:pickedImage?.path!=null?ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.file(
+                      File(pickedImage!.path).absolute,
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.fill,
+                    ),
+                  ): Container(padding: EdgeInsets.all(17),child: Icon(Icons.person_4_outlined)),
                 ),
-                child: Icon(Icons.person_4_outlined),
               ),
               SizedBox(
                 width: 20,
@@ -367,7 +408,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     Center(
                       child: ButtonWight(
-                        buttonText: "Confirm",
+                        buttonText: "Save",
                         borderButton: false,
                         width: Get.width * 0.9,
                         height: Get.height * 0.08,

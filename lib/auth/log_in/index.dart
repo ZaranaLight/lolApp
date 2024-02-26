@@ -8,7 +8,6 @@ import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/myTextFeildWidget.dart';
 import 'package:lol/widget/showCustomsnackBar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../utils/images.dart';
 import '../../widget/customButton.dart';
 
@@ -102,7 +101,6 @@ class _SignInScreenState extends State<SignInScreen> {
             child: Stack(
               children: [
                 Container(
-
                   height: Get.height,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -138,7 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   height: 15,
                                 ),
                                 Text(
-                                  'Sign In',
+                                  'Sign in',
                                   style: poppinsMedium.copyWith(
                                       color: ColorssA.blackColor,
                                       fontSize: Dimensions.fontSizeOverLarge,
@@ -147,42 +145,45 @@ class _SignInScreenState extends State<SignInScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  'E-mail',
-                                  style: TextStyle(
-                                      color: ColorssA.blackColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                // Text(
+                                //   'E-mail',
+                                //   style: TextStyle(
+                                //       color: ColorssA.blackColor,
+                                //       fontSize: 15,
+                                //       fontWeight: FontWeight.w500),
+                                // ),
                                 const SizedBox(
                                   height: 15,
                                 ),
                                 MyTextField(
                                     controller: _emailController,
+                                    lableText: 'Email',
                                     textInputType: TextInputType.emailAddress,
-                                    onTap: () {},
-                                    onSubmit: () {},
+                                    // onTap: () {},
+                                    // onSubmit: () {},
                                     onChanged: (email) {
                                       print('onChange-------------- ');
                                       // loginController.addSigupdata(
                                       //     "email", email);
-                                    },
+                                    } ,isEmail: true,
                                     hintText: 'Enter Your Email',
                                     titleText: 'Email'),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text(
-                                  'Password',
-                                  style: TextStyle(
-                                      color: ColorssA.blackColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                // Text(
+                                //   'Password',
+                                //   style: TextStyle(
+                                //       color: ColorssA.blackColor,
+                                //       fontSize: 15,
+                                //       fontWeight: FontWeight.w500),
+                                // ),
                                 MyTextField(
                                   controller: _passwordController,
-                                  onTap: () {},
-                                  onSubmit: () {},
+                                  lableText: "Password",
+
+                                  // onTap: () {},
+                                  // onSubmit: () {},
                                   onChanged: (password) {
                                     // loginController.addSigupdata(
                                     //     "password", password);
@@ -210,7 +211,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                             !_rememberMe == false
                                                 ? Icons.check_box
                                                 : Icons.check_box_outline_blank,
-                                            color: Theme.of(context).primaryColor,
+                                            color: Theme.of(context).hintColor,
                                           ),
                                         ),
                                         Text('Remember Me')
@@ -261,7 +262,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w600,
                                                   decoration:
-                                                      TextDecoration.underline),
+                                                      TextDecoration.none),
                                             ),
                                           ],
                                         ),
@@ -272,15 +273,22 @@ class _SignInScreenState extends State<SignInScreen> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                const Center(
-                                  child: Center(
-                                    child: Text(
-                                      '--- Or login with---',
-                                      style: TextStyle(
-                                          // color: ColorssA.Black.withOpacity(0.5),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 15),
-                                    ),
+                                  Center(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(width: 100,height: 1,color: Colors.black.withOpacity(.2),),
+                                      Text(
+                                        ' Or login with ',
+                                        style: TextStyle(
+                                            // color: ColorssA.Black.withOpacity(0.5),
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15),
+                                      ),
+                                      Container(width: 100,height: 1,color: Colors.black.withOpacity(.2),),
+
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(

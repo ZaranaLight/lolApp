@@ -96,7 +96,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 height: 15,
                               ),
                               Text(
-                                'Sign Up',
+                                'Sign up',
                                 style: poppinsMedium.copyWith(
                                     color: ColorssA.blackColor,
                                     fontSize: Dimensions.fontSizeOverLarge,
@@ -105,18 +105,19 @@ class _SignupScreenState extends State<SignupScreen> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              Text(
-                                'E-mail',
-                                style: TextStyle(
-                                    color: ColorssA.blackColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                              // Text(
+                              //   'E-mail',
+                              //   style: TextStyle(
+                              //       color: ColorssA.blackColor,
+                              //       fontSize: 15,
+                              //       fontWeight: FontWeight.w500),
+                              // ),
                               MyTextField(
                                   controller: _emailController,
+                                  lableText: 'Email',isEmail: true,
                                   textInputType: TextInputType.emailAddress,
-                                  onTap: () {},
-                                  onSubmit: () {},
+                                  // onTap: () {},
+                                  // onSubmit: () {},
                                   onChanged: (email) {
                                     print('onChange-------------- ');
                                     authController.addSignupData(
@@ -127,23 +128,24 @@ class _SignupScreenState extends State<SignupScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                'Password',
-                                style: TextStyle(
-                                    color: ColorssA.blackColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                              // Text(
+                              //   'Password',
+                              //   style: TextStyle(
+                              //       color: ColorssA.blackColor,
+                              //       fontSize: 15,
+                              //       fontWeight: FontWeight.w500),
+                              // ),
                               MyTextField(
                                 controller: _passwordController,
-                                onTap: () {},
-                                onSubmit: () {},
+                                // onTap: () {},
+                                // onSubmit: () {},
                                 onChanged: (password) {
                                   authController.addSignupData(
                                       "password", password);
                                 },
                                 hintText: 'Enter Your Password',
                                 titleText: 'Password',
+                                lableText: 'Password',
                                 maxLines: 1,
                                 isPassword: true,
                                 selectedPass: true,

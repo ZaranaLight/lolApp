@@ -46,6 +46,9 @@ class AuthRepo {
       "user_id": postDetail['id'],
     });
   }
+  // Future<Http.Response> uploadPost(Map<String, dynamic> postDetail) async {
+  //   return await apiClient.uploadPostAPI('','',postData: postDetail  );
+  // }
 
   Future<Response> getProfile(int userId) async {
     return await apiClient.getData('${AppConstants.get_profile}?id=${userId}');

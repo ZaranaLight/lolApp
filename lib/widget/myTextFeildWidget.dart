@@ -7,6 +7,7 @@ class MyTextField extends StatefulWidget {
   final String? titleText;
   final int? maxLines;
   final bool? isPassword;
+  final bool? isEmail;
 
   final bool? selectedPass;
   final Function? onTap;
@@ -40,7 +41,7 @@ class MyTextField extends StatefulWidget {
     this.focusNode,
     this.nextFocus,
     this.selectedPass = false,
-    this.textInputType, this.isReadonly,
+    this.textInputType, this.isReadonly, this.isEmail,
   });
 
   @override
@@ -54,7 +55,7 @@ class _MyTextFieldState extends State<MyTextField> {
   Widget build(BuildContext context) {
     return Container(
       width: Get.width * 0.9,
-      height: Get.height * 0.065,
+      // height: Get.height * 0.065,
       margin: EdgeInsets.symmetric(vertical: Get.height * 0.01),
       padding: EdgeInsets.only(left: Get.width * 0.05),
       decoration: BoxDecoration(
@@ -71,18 +72,16 @@ class _MyTextFieldState extends State<MyTextField> {
           controller: widget.controller,
           focusNode: widget.focusNode,
           readOnly: widget.isReadonly==true?true:false,
-
-
           obscureText: widget.isPassword! ? obscureText! : false,
           decoration: InputDecoration(
             hintText: widget.hintText,labelStyle: TextStyle(color: Colors.black),labelText: widget.lableText,
-            suffixIcon: widget.selectedPass == true
+            suffixIcon: widget.isEmail==true?Icon(Icons.check):widget.selectedPass == true
                 ? IconButton(
               icon: Icon(
                 obscureText == false
                     ? Icons.remove_red_eye
                     : Icons.remove_red_eye_outlined,
-                color: obscureText == false ? Colors.black : Colors.grey,
+                color: /*obscureText == false ? Colors.black :*/ Colors.grey,
                 size: 15,
               ),
               onPressed: () {
@@ -101,7 +100,7 @@ class _MyTextFieldState extends State<MyTextField> {
           onTap: () => widget.onTap!(),
           onSubmitted: (text) => widget.nextFocus != null
               ? FocusScope.of(context).requestFocus(widget.nextFocus)
-              : widget.onSubmit != null
+              : (widget.onSubmit != null)
               ? widget.onSubmit!(text)
               : null,
           onChanged: widget.onChanged!,

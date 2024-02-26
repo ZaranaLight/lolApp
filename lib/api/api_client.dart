@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -162,7 +163,54 @@ class ApiClient extends GetxService {
     }
   }
 
+  Future<Http.Response> uploadPostAPI(
+      dynamic filePath, String? base64Image,{Map<String,dynamic>? postData }) async {
+    print("========CallFile=======");
+    print(AppConstants.BASE_URL + AppConstants.uploadPost);
+    final postUri = Uri.parse(AppConstants.BASE_URL + AppConstants.uploadPost);
 
- 
+    Http.MultipartRequest request = Http.MultipartRequest('POST', postUri);
+
+    print('api client token');
+    token = '';
+    reToken = '';
+    print(filePath!);
+    Map<String, String> headers = {
+      // "Authorization": 'Bearer ' + token!,
+      // "x-refresh": 'Bearer ' + reToken!,
+      'id': postData!['id'].toString(),
+      'c_id': postData['c_id'].toString(),
+      'title':  postData['title'].toString(),
+      'user_id':  postData['user_id'].toString(),
+    };
+    request.headers.addAll(headers);
+
+    // print(filePath);
+    // Http.MultipartFile multipartFile =
+    // await Http.MultipartFile.fromPath('file', filePath);
+    //
+    // request.files.add(multipartFile);
+    //
+    request.fields.addAll({
+      'id': '5',
+      'c_id': '1',
+      'title': 'hi',
+      'user_id': '18'
+    });
+    // print(request.fields);
+    print(request.headers);
+
+    var res = await request.send().catchError((error) {
+      debugPrint("error $error");
+    });
+    print('statusCode');
+
+    print(res.statusCode);
+    var resmmain = await res.stream.transform(utf8.decoder);
+    final response = await Http.Response.fromStream(res);
+    print(response.body);
+    return response;
+  }
+
 
 }

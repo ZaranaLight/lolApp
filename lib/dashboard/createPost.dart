@@ -60,9 +60,9 @@ class _CreatePostState extends State<CreatePost> {
       return;
     } else {
       var userData = authController.authRepo.getUserDetail();
-
       authController.addPostData('c_id', '1');
       authController.addPostData('id', jsonDecode(userData)['id']);
+      authController.addPostData('user_id', jsonDecode(userData)['id']);
       authController.addPostData('title', descController.text);
       authController.addPostData('file', pickedImage?.path);
       authController.uploadPost(authController.postData, context);
@@ -327,279 +327,276 @@ class _CreatePostState extends State<CreatePost> {
           centerTitle: true,
         ),
         body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 15),
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                Container(
-                  height: Get.height * .7,
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: ColorssA.AppLinears,
-                  ),
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: ColorssA.dialpgColor),
-                            child: Image.asset(
-                              Images.bio,
-                              width: 50,
-                              height: 50,
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Shalini Chauhan',
-                                  style: poppinsMedium.copyWith(
-                                      color: ColorssA.whiteColor,
-                                      fontSize: Dimensions.fontSizeLarge,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
                       Container(
-                        height: Get.height * 0.5,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
-                        padding: const EdgeInsets.all(10),
+                        height: Get.height * .7,
+                        width: Get.width,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15)),
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: ColorssA.AppLinears,
+                        ),
                         child: Column(
                           children: [
                             Row(
                               children: [
-                                const Text(
-                                  'Select Category',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
+                                Container(
+                                  width: 50,
+                                  height: 50,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: ColorssA.dialpgColor),
+                                  child: Image.asset(
+                                    Images.bio,
+                                    width: 50,
+                                    height: 50,
+                                  ),
                                 ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: InkWell(
-                                    onTap: () {
-                                      showNEFTFilterPopup(context);
-                                    },
-                                    child: Container(
-                                      width: Get.width * 0.3,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          gradient: ColorssA.AppLinears,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              authController.catDropdownvalue ==
-                                                      'Select Type'
-                                                  ? 'Categories'
-                                                  : authController
-                                                      .catDropdownvalue,
-                                              style: TextStyle(
-                                                  color: ColorssA.whiteColor),
-                                            ),
-                                            Icon(
-                                              Icons.arrow_drop_down_rounded,
-                                              color: Colors.white,
-                                            )
-                                          ],
-                                        ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Shalini Chauhan',
+                                        style: poppinsMedium.copyWith(
+                                            color: ColorssA.whiteColor,
+                                            fontSize: Dimensions.fontSizeLarge,
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                            TextField(
-                              decoration: const InputDecoration(
-                                  hintText: 'Write here...',
-                                  enabledBorder: InputBorder.none),
-                              controller: descController,
-                              onSubmitted: (val) {
-                                authController.addPostData('title', val);
-                              },
-                            ),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () {
-                                pickImage(authController);
-                              },
-                              child: Container(
-                                  child: pickedImage == null
-                                      ? const Column(
-                                          children: [
-                                            Center(
-                                              child: Icon(
-                                                Icons.cloud_upload,
-                                                color: Colors.grey,
+                            Container(
+                              height: Get.height * 0.5,
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 0),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Select Category',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: InkWell(
+                                          onTap: () {
+                                            showNEFTFilterPopup(context);
+                                          },
+                                          child: Container(
+                                            width: Get.width * 0.3,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                gradient: ColorssA.AppLinears,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Text(
+                                                    authController
+                                                                .catDropdownvalue ==
+                                                            'Select Type'
+                                                        ? 'Categories'
+                                                        : authController
+                                                            .catDropdownvalue,
+                                                    style: TextStyle(
+                                                        color: ColorssA
+                                                            .whiteColor),
+                                                  ),
+                                                  Icon(
+                                                    Icons
+                                                        .arrow_drop_down_rounded,
+                                                    color: Colors.white,
+                                                  )
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              'Upload Here..',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
-                                            )
-                                          ],
-                                        )
-                                      : Center(
-                                          child: Image.file(
-                                            File(pickedImage!.path).absolute,
-                                            height: 80,
-                                            width: 80,
-                                            fit: BoxFit.fill,
                                           ),
-                                        )),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                _pickVideo();
-                              },
-                              child: Container(
-                                  child: _video == null
-                                      ? const Column(
-                                          children: [
-                                            Center(
-                                              child: Icon(
-                                                Icons.cloud_upload,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Upload Here..',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
-                                            )
-                                          ],
-                                        )
-                                      : _videoPlayerController!
-                                              .value.isInitialized
-                                          ? AspectRatio(
-                                              aspectRatio:
-                                                  _videoPlayerController!
-                                                      .value.aspectRatio,
-                                              child: VideoPlayer(
-                                                  _videoPlayerController!),
-                                            )
-                                          : Container()),
-                            ),
-                            const Spacer(),
-                            Row(
-                              children: [
-                                InkWell(
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  TextField(
+                                    decoration: const InputDecoration(
+                                        hintText: 'Write here...',
+                                        enabledBorder: InputBorder.none),
+                                    controller: descController,
+                                    onSubmitted: (val) {
+                                      authController.addPostData('title', val);
+                                    },
+                                  ),
+                                  const Spacer(),
+                                  InkWell(
                                     onTap: () {
                                       pickImage(authController);
                                     },
-                                    child: Icon(Icons.photo)),
-                                Icon(Icons.slow_motion_video),
-                                Icon(Icons.gif_box_outlined),
-                                Icon(Icons.music_note),
-                                Spacer(),
-                                Icon(Icons.emoji_emotions_outlined),
-                              ],
+                                    child: Container(
+                                        child: pickedImage == null
+                                            ? const Column(
+                                                children: [
+                                                  Center(
+                                                    child: Icon(
+                                                      Icons.cloud_upload,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    'Upload Here..',
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  )
+                                                ],
+                                              )
+                                            : Center(
+                                                child: Image.file(
+                                                  File(pickedImage!.path)
+                                                      .absolute,
+                                                  height: 80,
+                                                  width: 80,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              )),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      _pickVideo();
+                                    },
+                                    child: Container(
+                                        child: _video == null
+                                            ? Container()
+                                            : _videoPlayerController!
+                                                    .value.isInitialized
+                                                ? AspectRatio(
+                                                    aspectRatio:
+                                                        _videoPlayerController!
+                                                            .value.aspectRatio,
+                                                    child: VideoPlayer(
+                                                        _videoPlayerController!),
+                                                  )
+                                                : Container()),
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      InkWell(
+                                          onTap: () {
+                                            pickImage(authController);
+                                          },
+                                          child: Icon(Icons.photo)),
+                                      InkWell(
+                                          onTap: () {
+                                            _pickVideo();
+                                          },
+                                          child: Icon(Icons.slow_motion_video)),
+                                      Icon(Icons.gif_box_outlined),
+                                      Icon(Icons.music_note),
+                                      Spacer(),
+                                      Icon(Icons.emoji_emotions_outlined),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              alignment: Alignment.topRight,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text('Post Privacy'),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: const Row(
+                                        children: [
+                                          Text('Public'),
+                                          Icon(Icons.arrow_drop_down_sharp)
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 15,
                       ),
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text('Post Privacy'),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 5),
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.black,
-                                    ),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: const Row(
-                                  children: [
-                                    Text('Public'),
-                                    Icon(Icons.arrow_drop_down_sharp)
-                                  ],
-                                )),
-                            SizedBox(
-                              width: 15,
-                            ),
-                          ],
-                        ),
-                      )
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ButtonWight(
+                            buttonText: "Cancel",
+                            borderButton: false,
+                            width: Get.width * 0.4,
+                            height: Get.height * 0.07,
+                            // loading: load,
+                            onClick: () => {
+                              Get.back()
+                              // Navigator.pop(context)
+                            },
+                          ),
+                          ButtonWight(
+                            buttonText: "Publish",
+                            borderButton: false,
+                            width: Get.width * 0.4,
+                            height: Get.height * 0.07,
+                            // loading: load,
+                            onClick: () => {
+                              _updatePost(authController)
+                              // Navigator.pop(context)
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ButtonWight(
-                      buttonText: "Cancel",
-                      borderButton: false,
-                      width: Get.width * 0.4,
-                      height: Get.height * 0.07,
-                      // loading: load,
-                      onClick: () => {
-                        Get.back()
-                        // Navigator.pop(context)
-                      },
-                    ),
-                    ButtonWight(
-                      buttonText: "Publish",
-                      borderButton: false,
-                      width: Get.width * 0.4,
-                      height: Get.height * 0.07,
-                      // loading: load,
-                      onClick: () => {
-                        _updatePost(authController)
-                        // Navigator.pop(context)
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       );
     });
   }

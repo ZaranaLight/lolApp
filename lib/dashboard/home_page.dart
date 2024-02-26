@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -430,196 +430,210 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: 15,
                   ),
-                  ListView.builder(
-                    itemCount: authController.postList.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-
-
-                      return Container(
-                        height: Get.height * 0.475,
-                        margin: EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                            gradient: ColorssA.AppLinears,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 8),
+                  authController.postList.isEmpty
+                      ? Container(
+                          height: Get.height * .7,
+                          child: Center(
+                            child: Text(
+                              'No Post Found!',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: authController.postList.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              height: Get.height * 0.475,
+                              margin: EdgeInsets.only(bottom: 15),
                               decoration: BoxDecoration(
-                                gradient: ColorssA.AppLinears,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                              ),
-                              child: Row(
+                                  gradient: ColorssA.AppLinears,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                    width: 50,
-                                    height: 50,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 8),
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        color: ColorssA.dialpgColor),
-                                    child:  Image.asset(
+                                      gradient: ColorssA.AppLinears,
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: ColorssA.dialpgColor),
+                                          child: Image.asset(
                                             Images.bio,
                                             width: 50,
                                             height: 50,
                                           ),
-                                  ),
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Shalini Chauhan',
-                                          style: poppinsMedium.copyWith(
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 15),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Shalini Chauhan',
+                                                style: poppinsMedium.copyWith(
+                                                    color: ColorssA.whiteColor,
+                                                    fontSize: Dimensions
+                                                        .fontSizeLarge,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              Text(
+                                                'Suggested for your . 1d',
+                                                style: TextStyle(
+                                                    color: ColorssA.whiteColor),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.save,
                                               color: ColorssA.whiteColor,
-                                              fontSize:
-                                                  Dimensions.fontSizeLarge,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          'Suggested for your . 1d',
-                                          style: TextStyle(
-                                              color: ColorssA.whiteColor),
-                                        ),
+                                            ))
                                       ],
                                     ),
                                   ),
-                                  Spacer(),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.save,
-                                        color: ColorssA.whiteColor,
-                                      ))
-                                ],
-                              ),
-                            ),
-                            // Image.network('https://images.unsplash.com/photo-1584810359583-96fc3448beaa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80',fit: BoxFit.cover,width: Get.width,height: 143,),
-                            // Image.asset(Images.post2, fit: BoxFit.fill,
-                            //   width: Get.width,
-                            //   height: 200,),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
-                              child: Text(
-                                authController.postList[index]['title'] ?? "",
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                            authController.postList[index]
-                            ['file'] !=
-                                ''
-                                ? Image.network(
-                              AppConstants.IMAGE_URL+ authController.postList[index]
-                              ['file'],
-                              width: Get.width,fit: BoxFit.fill,
-                              height: Get.height*0.27,
-                            )
-                                :Container(),
-                            // Image.file(File(authController.homeList[index]['file'])),
+                                  // Image.network('https://images.unsplash.com/photo-1584810359583-96fc3448beaa?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80',fit: BoxFit.cover,width: Get.width,height: 143,),
+                                  // Image.asset(Images.post2, fit: BoxFit.fill,
+                                  //   width: Get.width,
+                                  //   height: 200,),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: Text(
+                                      authController.postList[index]['title'] ??
+                                          "",
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                  ),
+                                  authController.postList[index]['file'] != ''
+                                      ? Image.network(
+                                          AppConstants.IMAGE_URL +
+                                              authController.postList[index]
+                                                  ['file'],
+                                          width: Get.width,
+                                          fit: BoxFit.fill,
+                                          height: Get.height * 0.27,
+                                        )
+                                      : Container(),
+                                  // Image.file(File(authController.homeList[index]['file'])),
 
-                            Spacer(),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 10),
-                              decoration: BoxDecoration(
-                                gradient: ColorssA.AppLinears,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                  Spacer(),
                                   Container(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.thumb_up_alt_rounded,
-                                          color: ColorssA.blackColor,
-                                          size: 20,
-                                        ),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          '27',
-                                          style: TextStyle(
-                                            color: ColorssA.blackColor,
-                                          ),
-                                        )
-                                      ],
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 15, horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      gradient: ColorssA.AppLinears,
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
                                     child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.comment,
-                                          color: ColorssA.blackColor,
-                                          size: 20,
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          '20',
-                                          style: TextStyle(
-                                            color: ColorssA.blackColor,
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.thumb_up_alt_rounded,
+                                                color: ColorssA.blackColor,
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '27',
+                                                style: TextStyle(
+                                                  color: ColorssA.blackColor,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.share_sharp,
-                                          color: ColorssA.blackColor,
-                                          size: 20,
                                         ),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Text(
-                                          '10',
-                                          style: TextStyle(
-                                            color: ColorssA.blackColor,
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.comment,
+                                                color: ColorssA.blackColor,
+                                                size: 20,
+                                              ),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '20',
+                                                style: TextStyle(
+                                                  color: ColorssA.blackColor,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        )
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.share_sharp,
+                                                color: ColorssA.blackColor,
+                                                size: 20,
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '10',
+                                                style: TextStyle(
+                                                  color: ColorssA.blackColor,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  )
+                            );
+                          },
+                        )
                 ],
               ),
             ),
