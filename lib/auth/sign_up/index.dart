@@ -195,7 +195,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w600,
                                                 decoration:
-                                                    TextDecoration.underline),
+                                                    TextDecoration.none),
+
                                           ),
                                         ],
                                       ),
