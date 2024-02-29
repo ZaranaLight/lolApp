@@ -54,6 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController contactController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController pinCode = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController editPassController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
   TextEditingController qualificationPassController = TextEditingController();
@@ -63,9 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
   ];
 
   void _updateProfile(AuthController authController) async {
-    print(authController.sigupdata);
 
-    if (contactController.text.isEmpty) {
+
+  /*  if (contactController.text.isEmpty) {
       showCustomSnackBar('Enter your contact number.', context);
       return;
     }
@@ -97,13 +98,13 @@ class _ProfilePageState extends State<ProfilePage> {
     if (selectedGender == '') {
       showCustomSnackBar('Select Gender.', context);
       return;
-    } else {
+    } */  {
       authController.addSignupData("email", jsonDecode(userData)['email']);
       authController.addSignupData("id", jsonDecode(userData)['id']);
       authController.addSignupData("gender", selectedGender);
       print('validation s');
 
-      authController.profile(authController.sigupdata, context);
+      // authController.profile(authController.sigupdata, context);
     }
   }
 
@@ -177,7 +178,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Icon(Icons.edit_note_outlined,color: Colors.black,))
+                      child: Icon(
+                        Icons.edit_note_outlined,
+                        color: Colors.black,
+                      ))
                 ],
               ),
             ),
@@ -223,6 +227,8 @@ class _ProfilePageState extends State<ProfilePage> {
             authController.getProfile();
             pinCode = TextEditingController(
                 text: authCon.userDetails['pincode'] ?? "");
+            emailController = TextEditingController(
+                text: jsonDecode(userData)['email'] ?? "");
             contactController = TextEditingController(
                 text: authCon.userDetails['contact'] ?? "");
             addressController = TextEditingController(
@@ -231,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 text: authCon.userDetails['qualification'] ?? "");
           },
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
@@ -242,17 +248,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     'E-mail',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
                   ),
-                  TextField(
-                    readOnly: true,
-                    decoration: InputDecoration(
-                        hintText: "Enter your email",
-                        labelText: jsonDecode(userData)['email'],
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                  const SizedBox(
+                    height: 5,
                   ),
+                    TextField(
+                    readOnly: true,
+                    controller: emailController,
+                    decoration: const InputDecoration(
 
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
+                        hintText: "Enter your email",
+                        hintStyle: TextStyle(fontSize: 13),
+                        // labelText: jsonDecode(userData)['email'],
+                        labelStyle: TextStyle(
+                            color: Color(0xFF424242), fontSize: 13)),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -260,20 +273,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Contact Number',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   TextField(
                     controller: contactController,
+
                     keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
                         hintText: 'Contact Number',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                        hintStyle: TextStyle(fontSize: 13),
+                        labelStyle: TextStyle(color: Color(0xFF424242),  fontSize: 13)),
                     onChanged: (contact) {
                       authController.addSignupData("contact", contact);
                     },
                   ),
-
                   const SizedBox(
                     height: 10,
                   ),
@@ -281,36 +299,46 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Address',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   TextField(
                     controller: addressController,
                     keyboardType: TextInputType.emailAddress,
+
                     decoration: InputDecoration(
                         hintText: 'Complete address',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
+                        hintStyle: TextStyle(fontSize: 13),
+                        labelStyle: TextStyle(color: Color(0xFF424242),  fontSize: 13)),
                     onChanged: (address) {
                       authController.addSignupData("address", address);
                     },
                   ),
-
                   const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Edit Password',
+                    'Update Password',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   TextField(
                     controller: editPassController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Edit Password',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                    decoration: const InputDecoration(
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
+                        hintText: 'Update Password',
+                        hintStyle: TextStyle(fontSize: 13),
+                        labelStyle: TextStyle(color: Color(0xFF424242),  fontSize: 13)),
                     onChanged: (edit_password) {
                       authController.addSignupData(
                           "edit_password", edit_password);
@@ -321,47 +349,27 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 10,
                   ),
                   Text(
-                    'Confirm Password',
-                    style: TextStyle(
-                        color: ColorssA.blackColor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  TextField(
-                    controller: confirmPassController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Confirm Password',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
-                    onChanged: (confirm_password) {
-                      authController.addSignupData(
-                          "confirm_password", confirm_password);
-                    },
-                  ),
-
-                  const SizedBox(
-                    height: 10,
-                  ),
-
-
-                  Text(
                     'Pin Code',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   TextField(
                     controller: pinCode,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
                         hintText: 'Pincode',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                        hintStyle: TextStyle(fontSize: 13),
+                        labelStyle: TextStyle(color: Color(0xFF424242),  fontSize: 13)),
                     onChanged: (pincode) {
                       authController.addSignupData("pincode", pincode);
                     },
                   ),
-
                   const SizedBox(
                     height: 10,
                   ),
@@ -369,11 +377,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Gender',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
 
                   Row(
@@ -420,46 +425,53 @@ class _ProfilePageState extends State<ProfilePage> {
                     'Qualification',
                     style: TextStyle(
                         color: ColorssA.blackColor,
-                        fontSize: 15,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   TextField(
                     controller: qualificationPassController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
+                        constraints: BoxConstraints(maxHeight: 25, minHeight: 5),
                         hintText: 'Qualification',
-                        labelStyle: const TextStyle(color: Color(0xFF424242))),
+                        hintStyle: TextStyle(fontSize: 13),
+                        labelStyle: TextStyle(color: Color(0xFF424242),  fontSize: 13)),
                     onChanged: (qualification) {
                       authController.addSignupData(
                           "qualification", qualification);
                     },
                   ),
-                 const SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Center(
-                    child: ButtonWight(
-                      buttonText: "Save",
-                      borderButton: false,
-                      width: Get.width * 0.9,
-                      height: Get.height * 0.08,
-                      loading: authController.isLoading,
-                      onClick: () => {
-                        _updateProfile(authController)
-                        // Get.toNamed(RouteHelper.getSignIn())
-                        // Navigator.pop(context)
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+
+
+
                 ],
               ),
             ),
           ),
         ),
+        bottomNavigationBar:  Container(
+          height: 55,
+          margin: EdgeInsets.only(bottom: 15),
+          alignment: Alignment.bottomCenter,
+          child: ButtonWight(
+            buttonText: "Save",
+            borderButton: false,
+            width: Get.width * 0.9,
+            height: Get.height * 0.08,
+            loading: authController.isLoading,
+            onClick: () => {
+              _updateProfile(authController)
+            },
+          ),
+        ),
       );
+
     });
   }
 

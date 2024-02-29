@@ -43,7 +43,7 @@ class ApiClient extends GetxService {
   void updateHeader(String? token, String? languageCode) {
     _mainHeaders = {
       'Content-Type': 'application/json; charset=UTF-8',
-      "Authorization": 'Bearer ' + token!,
+      // "Authorization": 'Bearer ' + token!,
     };
   }
 
@@ -114,6 +114,7 @@ class ApiClient extends GetxService {
         body: jsonEncode(body),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
+      debugPrint('====> API Body: ${(appBaseUrl + uri.toString())}');
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
