@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:focus_detector/focus_detector.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:lol/constanmt/app_constant.dart';
 import 'package:lol/controller/authController.dart';
@@ -11,6 +13,8 @@ import 'package:lol/utils/dimentions.dart';
 import 'package:lol/utils/images.dart';
 import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/dropDownWidget.dart';
+import 'package:lol/widget/showCustomsnackBar.dart';
+import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -348,6 +352,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  downloadImage(String path) async {
+    await GallerySaver.saveImage(path).then(
+      (value) => showCustomSnackBar('Image Saved Successfully', context,
+          isError: false),
+    );
+  }
+
+  VideoPlayerController? _videoPlayerController;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(builder: (authController) {
@@ -367,34 +380,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Container(
-                      //     width: Get.width * 0.55,
-                      //     height: 40,
-                      //     decoration: BoxDecoration(
-                      //         gradient: ColorssA.AppLinears,
-                      //         borderRadius: BorderRadius.circular(10)),
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.start,
-                      //       children: [
-                      //         SizedBox(
-                      //           width: 10,
-                      //         ),
-                      //         Icon(
-                      //           Icons.search,
-                      //           color: ColorssA.whiteColor,
-                      //           size: 20,
-                      //         ),
-                      //         SizedBox(
-                      //           width: 20,
-                      //         ),
-                      //         Center(
-                      //           child: Text(
-                      //             'Search',
-                      //             style: TextStyle(color: ColorssA.whiteColor),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     )),
                       InkWell(
                         onTap: () {
                           showNEFTFilterPopup(context);
@@ -428,29 +413,29 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   authController.postList.isEmpty
-                      ? Container(
+                      ? SizedBox(
                           height: Get.height * .7,
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               'No Post Found!',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
                         )
-                      : Container(
-                    height: Get.height * .8,
-                        child: ListView.builder(
-                            itemCount: authController.postList.length,
+                      : SizedBox(
+                          height: Get.height * .8,
+                          child: ListView.builder(
+                            itemCount: authController.postList.reversed.length,
                             shrinkWrap: true,
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 height: Get.height * 0.475,
-                                margin: EdgeInsets.only(bottom: 15),
+                                margin: const EdgeInsets.only(bottom: 15),
                                 decoration: BoxDecoration(
                                     gradient: ColorssA.AppLinears,
                                     borderRadius: BorderRadius.circular(10)),
@@ -499,23 +484,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Text(
                                                   'Shalini Chauhan',
                                                   style: poppinsMedium.copyWith(
-                                                      color: ColorssA.whiteColor,
+                                                      color:
+                                                          ColorssA.whiteColor,
                                                       fontSize: Dimensions
                                                           .fontSizeLarge,
                                                       fontWeight:
                                                           FontWeight.w700),
                                                 ),
                                                 Text(
-                                                  'Suggested for your . 1d',
+                                                  'Created At ${authController.postList[index]['created_at'].substring(0, 11)}',
                                                   style: TextStyle(
-                                                      color: ColorssA.whiteColor),
+                                                      color:
+                                                          ColorssA.whiteColor),
                                                 ),
                                               ],
                                             ),
                                           ),
                                           Spacer(),
                                           IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                downloadImage(
+                                                    AppConstants.IMAGE_URL +
+                                                        authController
+                                                                .postList[index]
+                                                            ['file']);
+                                              },
                                               icon: Icon(
                                                 Icons.save,
                                                 color: ColorssA.whiteColor,
@@ -531,7 +524,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 10),
                                       child: Text(
-                                        authController.postList[index]['title'] ??
+                                        authController.postList[index]
+                                                ['title'] ??
                                             "",
                                         style: const TextStyle(
                                             color: Colors.white,
@@ -541,14 +535,57 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     authController.postList[index]['file'] != ''
-                                        ? Image.network(
-                                            AppConstants.IMAGE_URL +
-                                                authController.postList[index]
-                                                    ['file'],
-                                            width: Get.width,
-                                            fit: BoxFit.fill,
-                                            height: Get.height * 0.27,
-                                          )
+                                        ? authController.postList[index]
+                                                    ['file_type'] ==
+                                                'video'
+                                            ? FocusDetector(
+                                      onVisibilityGained: (){
+                                        print('vvvvv=======');
+                                      },
+                                      onFocusGained: (){
+                                        _videoPlayerController
+                                            ?.play();
+                                        print('isInitialized--${_videoPlayerController?.value.isInitialized}');
+                                        _videoPlayerController = VideoPlayerController.file(
+                                            File(AppConstants
+                                                .IMAGE_URL +
+                                                authController
+                                                    .postList[
+                                                index]['file']))
+                                          ..initialize().then((_) {
+                                            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                            setState(() {
+                                              _videoPlayerController
+                                                  ?.play();
+                                            });
+                                          });
+                                      },
+                                              child: AspectRatio(
+                                                  aspectRatio: 3.5 / 2,
+                                                  child: VideoPlayer(
+                                                      VideoPlayerController.file(
+                                                          File(AppConstants
+                                                                  .IMAGE_URL +
+                                                              authController
+                                                                      .postList[
+                                                                  index]['file']))
+                                                        ..initialize()
+                                                            .then((value) {
+                                                          setState(() {});
+                                                          _videoPlayerController
+                                                              ?.play();
+                                                        })),
+                                                ),
+                                            )
+                                            : Image.network(
+                                                AppConstants.IMAGE_URL +
+                                                    authController
+                                                            .postList[index]
+                                                        ['file'],
+                                                width: Get.width,
+                                                fit: BoxFit.fill,
+                                                height: Get.height * 0.27,
+                                              )
                                         : Container(),
                                     // Image.file(File(authController.homeList[index]['file'])),
 
@@ -637,7 +674,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
-                      )
+                        )
                 ],
               ),
             ),

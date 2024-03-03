@@ -27,11 +27,9 @@ class AuthRepo {
     return await apiClient.postData(AppConstants.update_profile, {
       "contact": profileData['contact'],
       "address": profileData['address'],
-      "edit_password": profileData['edit_password'],
-      "confirm_password": profileData['confirm_password'],
       "qualification": profileData['qualification'],
       "pincode": profileData['pincode'],
-      "gender": profileData['gender'],
+      "gender":'male',
       "id": profileData['id'],
       "email": profileData['email'],
     });
@@ -39,16 +37,11 @@ class AuthRepo {
 
   Future<Response> uploadPost(Map<String, dynamic> postDetail) async {
     return await apiClient.postData(AppConstants.uploadPost, {
-      "id": postDetail['id'],
       "c_id": postDetail['c_id'],
-      "title": postDetail['title'],
-      "file": postDetail['file'],
+      "file":postDetail['file'].toString(),
       "user_id": postDetail['id'],
     });
   }
-  // Future<Http.Response> uploadPost(Map<String, dynamic> postDetail) async {
-  //   return await apiClient.uploadPostAPI('','',postData: postDetail  );
-  // }
 
   Future<Response> getProfile(int userId) async {
     return await apiClient.getData('${AppConstants.get_profile}?id=${userId}');

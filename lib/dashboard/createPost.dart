@@ -1,9 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lol/constanmt/app_constant.dart';
 import 'package:lol/controller/authController.dart';
 import 'package:lol/utils/colors.dart';
 import 'package:lol/utils/dimentions.dart';
@@ -24,8 +30,10 @@ class CreatePost extends StatefulWidget {
 class _CreatePostState extends State<CreatePost> {
   File? pickedImage;
   bool picked = false;
-
+bool isImageType= false;
+bool isVideoType= false;
   Future pickImage(AuthController authController) async {
+    pickedImage = File('');
     final ImagePicker picker = ImagePicker();
     final pickedFile =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
@@ -35,37 +43,71 @@ class _CreatePostState extends State<CreatePost> {
       // pickedImage = imageFile;
       setState(() {
         pickedImage = imageFile;
-
         print('imageFilepath------------${imageFile}');
         picked = true;
+        isImageType = true;
+        isVideoType = false;
 
-        // catalougeUploadImage(pickedImage!);
       });
-      //  return imageFile;
+
+      // var request = http.MultipartRequest('POST', Uri.parse('https://mcq.codingbandar.com/api/uploadPost'));
+      // request.fields.addAll({
+      //   'c_id': '1',
+      //   'user_id': '19'
+      // });
+      // request.files.add(await http.MultipartFile.fromPath('file',imageFile.path));
+      //
+      // http.StreamedResponse response = await request.send();
+      //
+      // if (response.statusCode == 200) {
+      // print(await response.stream.bytesToString());
+      //
+      // }
+      // else {
+      // print(response.reasonPhrase);
+      // }
+      // uploadImage(pickedImage!);
+      // catalougeUploadImage(pickedImage!);
     } else {
       picked = false;
     }
-    //else{
-    // throw "null";
-    // }
   }
 
   TextEditingController descController = TextEditingController();
+  bool isLoading = false;
 
   void _updatePost(AuthController authController) async {
     print(authController.sigupdata);
-
     if (descController.text.isEmpty) {
       showCustomSnackBar('Please Enter Text For Upload Post.', context);
+
       return;
     } else {
       var userData = authController.authRepo.getUserDetail();
-      authController.addPostData('c_id', '1');
-      authController.addPostData('id', jsonDecode(userData)['id']);
-      authController.addPostData('user_id', jsonDecode(userData)['id']);
-      authController.addPostData('title', descController.text);
-      authController.addPostData('file', pickedImage?.path);
-      authController.uploadPost(authController.postData, context);
+      print('id------------${jsonDecode(userData)['id']}');
+      setState(() {
+        isLoading = true;
+      });
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('https://mcq.codingbandar.com/api/uploadPost'));
+      request.fields.addAll(
+          {'c_id': '1', 'user_id': jsonDecode(userData)['id'].toString()});
+      request.files
+          .add(await http.MultipartFile.fromPath('file', pickedImage!.path ));
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        print(await response.stream.bytesToString());
+        showCustomSnackBar('Profile Updated Succefully', context,
+            isError: false);
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        print(response.reasonPhrase);
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -176,17 +218,22 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   VideoPlayerController? _videoPlayerController;
-  File? _video;
+  // File? _video;
   final piker = ImagePicker();
 
   _pickVideo() async {
+    pickedImage = File('');
     final video = await piker.pickVideo(source: ImageSource.gallery);
-    _video = File(video!.path);
-    _videoPlayerController = VideoPlayerController.file(_video!)
+    pickedImage = File(video!.path);
+    _videoPlayerController = VideoPlayerController.file(pickedImage!)
       ..initialize().then((value) {
         setState(() {});
         _videoPlayerController?.play();
       });
+    setState(() {
+      isVideoType = true;
+isImageType=false;
+    });
   }
 
   showNEFTFilterPopup(BuildContext context) {
@@ -249,8 +296,6 @@ class _CreatePostState extends State<CreatePost> {
                             builder: (BuildContext context, setState) {
                           return InkWell(
                             onTap: () {
-                              print('hi--------');
-                              print(authController.catDropdownvalue);
                               setState(() {
                                 SelectTypeTitle = "Select Type";
                                 selecterArray = authController.catList;
@@ -298,24 +343,6 @@ class _CreatePostState extends State<CreatePost> {
         });
       }),
     );
-  }
-
-  Future uploadPosts(/*String title, String body*/) async {
-    Map<String, dynamic> req = {
-      'id': "1",
-      'c_id':"1",
-      'title': 'dfsfsdfsf',
-      'user_id': "1",
-    };
-    final uri = Uri.parse("https://mcq.codingbandar.com/api/uploadPost");
-    final response = await http.post(uri, body: req);
-print('ssssssssss- ${response.statusCode}');
-print('ssssssssss- ${response.body}');
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to load ppost');
-    }
   }
 
   @override
@@ -464,13 +491,60 @@ print('ssssssssss- ${response.body}');
                               },
                             ),
                             const Spacer(),
+                            // InkWell(
+                            //   onTap: () async {
+                            //     pickImage(authController);
+                            //   },
+                            //   child: Container(
+                            //       child: pickedImage == null
+                            //           ? const Column(
+                            //               children: [
+                            //                 Center(
+                            //                   child: Icon(
+                            //                     Icons.cloud_upload,
+                            //                     color: Colors.grey,
+                            //                   ),
+                            //                 ),
+                            //                 Text(
+                            //                   'Upload Here..',
+                            //                   style:
+                            //                       TextStyle(color: Colors.grey),
+                            //                 )
+                            //               ],
+                            //             )
+                            //           : Center(
+                            //               child: ClipRRect(
+                            //                 borderRadius:
+                            //                     BorderRadius.circular(15),
+                            //                 child: Image.file(
+                            //                   File(pickedImage!.path).absolute,
+                            //                   height: 200,
+                            //                   width: 200,
+                            //                   fit: BoxFit.fill,
+                            //                 ),
+                            //               ),
+                            //             )),
+                            // ),
                             InkWell(
                               onTap: () {
-                                pickImage(authController);
+                                _pickVideo();
                               },
                               child: Container(
-                                  child: pickedImage == null
-                                      ? const Column(
+                                  child:isVideoType==true?_videoPlayerController!
+                                              .value.isInitialized
+                                          ? AspectRatio(
+                                              aspectRatio:
+                                                 3.5/2.8,
+                                              child: VideoPlayer(
+                                                  _videoPlayerController!),
+                                            )
+                                          : Container() :isImageType==true? InkWell(
+                                    onTap: () async {
+                                      pickImage(authController);
+                                    },
+                                    child: Container(
+                                        child: pickedImage == null
+                                            ? const Column(
                                           children: [
                                             Center(
                                               child: Icon(
@@ -481,36 +555,37 @@ print('ssssssssss- ${response.body}');
                                             Text(
                                               'Upload Here..',
                                               style:
-                                                  TextStyle(color: Colors.grey),
+                                              TextStyle(color: Colors.grey),
                                             )
                                           ],
                                         )
-                                      : Center(
-                                          child: Image.file(
-                                            File(pickedImage!.path).absolute,
-                                            height: 80,
-                                            width: 80,
-                                            fit: BoxFit.fill,
+                                            : Center(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(15),
+                                            child: Image.file(
+                                              File(pickedImage!.path).absolute,
+                                              height: 200,
+                                              width: 200,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         )),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                _pickVideo();
-                              },
-                              child: Container(
-                                  child: _video == null
-                                      ? Container()
-                                      : _videoPlayerController!
-                                              .value.isInitialized
-                                          ? AspectRatio(
-                                              aspectRatio:
-                                                  _videoPlayerController!
-                                                      .value.aspectRatio,
-                                              child: VideoPlayer(
-                                                  _videoPlayerController!),
-                                            )
-                                          : Container()),
+                                  ):const Column(
+                                    children: [
+                                      Center(
+                                        child: Icon(
+                                          Icons.cloud_upload,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Upload Here..',
+                                        style:
+                                        TextStyle(color: Colors.grey),
+                                      )
+                                    ],
+                                  )),
                             ),
                             const Spacer(),
                             Row(
@@ -562,7 +637,7 @@ print('ssssssssss- ${response.body}');
                                     Icon(Icons.arrow_drop_down_sharp)
                                   ],
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               width: 15,
                             ),
                           ],
@@ -593,12 +668,8 @@ print('ssssssssss- ${response.body}');
                       borderButton: false,
                       width: Get.width * 0.4,
                       height: Get.height * 0.07,
-                      // loading: load,
-                      onClick: () => {
-                        // uploadPosts()
-                        _updatePost(authController)
-                        // Navigator.pop(context)
-                      },
+                      loading: isLoading,
+                      onClick: () => {_updatePost(authController)},
                     ),
                   ],
                 ),

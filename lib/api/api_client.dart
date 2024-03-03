@@ -115,6 +115,7 @@ class ApiClient extends GetxService {
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
       debugPrint('====> API Body: ${(appBaseUrl + uri.toString())}');
+      print('prinnngkrng==============${appBaseUrl + uri}');
       return handleResponse(_response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);

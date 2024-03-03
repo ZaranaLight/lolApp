@@ -43,6 +43,10 @@ dependencies:
   focus_detector: ^2.0.1
   image_picker: ^1.0.5
   video_player: ^2.8.2
+  dio: ^5.4.1
+  file_picker: ^6.1.1
+  path_provider: ^2.1.2
+  gallery_saver: ^2.3.2
 
 
 dev_dependencies:

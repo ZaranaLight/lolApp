@@ -33,19 +33,21 @@ class AuthController extends GetxController implements GetxService {
   Map<String, dynamic> get catDetails => _catDetails;
   Map<String, dynamic> _catDetails = {};
 
-
   Map<String, dynamic> get postDetails => _postDetails;
   Map<String, dynamic> _postDetails = {};
+
   List<dynamic> get postList => _postList;
-  List<dynamic> _postList =[];
+  List<dynamic> _postList = [];
 
   String _userData = "";
+
   String get userData => _userData;
 
   void addSignupData(String key, dynamic value) {
     _sigupdata[key] = value;
     update();
   }
+
   void addPostData(String key, dynamic value) {
     _postData[key] = value;
     update();
@@ -135,8 +137,10 @@ class AuthController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       if (response.body['status'] == false) {
         showCustomSnackBar(response.body['error'], context, isError: true);
-      } else if (response.body['status'] == 200 || response.body['status'] == true) {
-        showCustomSnackBar('Profile Updated Succefully', context, isError: false);
+      } else if (response.body['status'] == 200 ||
+          response.body['status'] == true) {
+        showCustomSnackBar('Profile Updated Succefully', context,
+            isError: false);
       }
       responseModel =
           ResponseModel(true, '${response.body['message']}', response.body);
@@ -148,52 +152,68 @@ class AuthController extends GetxController implements GetxService {
     return responseModel;
   }
 
-
-  Future<ResponseModel> uploadPost(
+  Future uploadPost(
       Map<String, dynamic> postDetail, BuildContext context) async {
     var userData = authRepo.getUserDetail();
 
-    postDetail['id']=jsonDecode(userData)['id'];
+    postDetail['id'] = jsonDecode(userData)['id'];
     _isLoading = true;
     update();
     Response response = (await authRepo.uploadPost(postDetail)) as Response;
     ResponseModel responseModel;
-    if (response.statusCode == 200) {
-      if (response.body['status'] == false) {
-        showCustomSnackBar(response.body['error'], context, isError: true);
-      } else if (response.body['status'] == 200 || response.body['status'] == true) {
-        showCustomSnackBar('Profile Updated Succefully', context, isError: false);
+    try {
+      if (response.statusCode == 200) {
+        print('------------test----------1');
+        if (response.body['status'] == false) {
+          print('------------test----------2');
+
+          showCustomSnackBar(response.body['error'], context, isError: true);
+        } else if (response.body['status'] == true ||
+            response.body['status'] == true) {
+          print('------------test----------3');
+
+          showCustomSnackBar('Profile Updated Succefully', context,
+              isError: false);
+        }
+        responseModel =
+            ResponseModel(true, '${response.body['message']}', response.body);
+        _isLoading = false;
+        update();
+        return responseModel;
+      } else {
+        print('------------test----------4');
+print('sssssssss-${response.statusCode}');
+        responseModel = ResponseModel(false, response.statusText!, {});
+        _isLoading = false;
+        update();
+        return responseModel;
       }
-      responseModel =
-          ResponseModel(true, '${response.body['message']}', response.body);
-    } else {
-      responseModel = ResponseModel(false, response.statusText!, {});
+    } catch (e) {
+
+      print('kjjjjjjjjjjjjjjjjjjj${e.toString()}');
     }
-    _isLoading = false;
-    update();
-    return responseModel;
   }
 
   Future<void> getProfile() async {
     var userData = authRepo.getUserDetail();
-    _isLoading = true;
-    update();
+
     Response response = await authRepo.getProfile(jsonDecode(userData)['id']);
     if (response.statusCode == 200) {
-      _userDetails = response.body['user'];
+      _userDetails = response.body['data'];
       update();
     } else {}
-    _isLoading = false;
-    update();
+
   }
+
   Future<void> getAllPosts() async {
     var userData = authRepo.getUserDetail();
     _isLoading = true;
     update();
     Response response = await authRepo.getAllPosts(jsonDecode(userData)['id']);
     if (response.statusCode == 200) {
-      _postDetails = response.body ;
-      _postList = response.body['data'] ;
+      _postDetails = response.body;
+      dynamic temp = response.body['data'];
+      _postList = temp.reversed.toList();
       update();
     } else {}
     _isLoading = false;
@@ -218,43 +238,47 @@ class AuthController extends GetxController implements GetxService {
   //   _isLoading = false;
   //   update();
   // }
-  List  _catList = [];
+  List _catList = [];
 
-  List  get catList => _catList;
+  List get catList => _catList;
 
-  Map<String, dynamic> get catDropdown =>
-      _catDropdown;
+  Map<String, dynamic> get catDropdown => _catDropdown;
   Map<String, dynamic> _catDropdown = {};
 
   String get catDropdownvalue => _catDropdownvalue;
   String _catDropdownvalue = 'Select Type';
 
-  setCategoryDropdownDetail(BuildContext context, String id, category_name,status) {
+  setCategoryDropdownDetail(
+      BuildContext context, String id, category_name, status) {
     _catDropdown['id'] = id;
     _catDropdown['category_name'] = category_name;
     _catDropdown['status'] = status;
     update();
   }
 
-  setCatVal(String newVal){
+  setCatVal(String newVal) {
     print('newnal-------${newVal}');
-    _catDropdownvalue=newVal;
+    _catDropdownvalue = newVal;
     update();
   }
+
   addDropdowndata(String key, dynamic value) {
     _catDropdown[key] = value;
     update();
   }
+
   Map<String, dynamic> get selectedEnterpriseList => _selectedEnterpriseList;
   Map<String, dynamic> _selectedEnterpriseList = {};
   List<dynamic> _specialist = [];
+
   List<dynamic> get specialist => _specialist;
+
   Future<void> getCategory() async {
     _isLoading = true;
     update();
     Response response = await authRepo.getCategory();
     if (response.statusCode == 200) {
-      if(response.body['status']==true){
+      if (response.body['status'] == true) {
         _catDetails = response.body;
         print('_catDetails===${_catDetails}');
         List<String> items = [];
@@ -262,19 +286,18 @@ class AuthController extends GetxController implements GetxService {
         for (var element in _catDetails['data']) {
           items.add(element["category_name"]);
         }
-        for (var element in  _catDetails['data']) {
+        for (var element in _catDetails['data']) {
           idList.add(element["id"].toString());
         }
-        _selectedEnterpriseList['category_name']=items;
-        _selectedEnterpriseList['id']=idList;
-        _catList=items;
+        _selectedEnterpriseList['category_name'] = items;
+        _selectedEnterpriseList['id'] = idList;
+        _catList = items;
 
         print('items===${items}');
         print('_catList===${_catList}');
 
         update();
       }
-
     } else {}
     _isLoading = false;
     update();

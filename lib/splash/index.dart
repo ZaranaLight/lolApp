@@ -44,12 +44,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/rat.png'), fit: BoxFit.cover),
+          // image: DecorationImage(
+          //     image: AssetImage('assets/images/rat.png'), fit: BoxFit.cover,),
         ),
-        child: Column(
-          children: [],
-        ),
+        child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,),),
       ),
     );
   }

@@ -17,7 +17,7 @@ class AppConstants {
   static const String register = 'register';
   static const String login = 'login';
   static const String update_profile = 'updateProfile';
-  static const String get_profile = 'profile';
+  static const String get_profile = 'getProfile';
   static const String getAllCategory = 'getAllCategory';
   static const String uploadPost = 'uploadPost';
   static const String getAllPosts = 'getAllPosts';
