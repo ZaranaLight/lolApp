@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String APP_NAME = 'LOL';
+  static const String APP_NAME = 'Joxify';
   static const double APP_VERSION = 1.0;
   static const String THEME = 'theme';
   static const String EMAIL = 'email';

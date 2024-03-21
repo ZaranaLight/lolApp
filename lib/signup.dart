@@ -68,6 +68,8 @@ class MySignUp extends StatelessWidget {
                         ),
                         TextField(
                           controller: signUpController.email,
+                          keyboardType: TextInputType.emailAddress,
+
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(

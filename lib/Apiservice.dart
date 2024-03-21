@@ -1,7 +1,11 @@
 class Apiservice {
-  static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
+  static const String BASE_URL = 'https://joxify.in/api/';
+  // static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
   static const String IMAGE_URL =
-      'https://mcq.codingbandar.com/front/assets/posts/';
+      'https://joxify.in/front/assets/posts/';
+
+  // static const String IMAGE_URL =
+  //     'https://mcq.codingbandar.com/front/assets/posts/';
   static var getAllCategory = "${BASE_URL}getAllCategory";
   static var getAllPosts = "${BASE_URL}getAllPosts";
   static var uploadPost = "${BASE_URL}uploadPost";

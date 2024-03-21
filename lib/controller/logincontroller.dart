@@ -39,7 +39,7 @@ class LoginController extends GetxController {
           'password': password.value.text,
         },
       );
-
+print('responseCode----------${response.statusCode}');
       if (response.statusCode == 200) {
         Map<String, dynamic> map = json.decode(response.body);
 

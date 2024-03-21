@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Joxify',
       home: storage.read("userid") == null ? MyLogin() : MyBottombar(),
     );
   }

@@ -50,6 +50,7 @@ class MyLogin extends StatelessWidget {
                         ),
                         TextField(
                           controller: loginController.email.value,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
