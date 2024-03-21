@@ -1,48 +1,34 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:lol/helpers/routes_helper.dart';
-import 'package:lol/utils/colors.dart';
+import 'package:get_storage/get_storage.dart';
+import 'bottombar.dart';
+import 'login.dart';
 
-import 'helpers/get_di.dart'as di;
-
-
-
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await di.init();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized
+  await GetStorage.init(); // Initialize GetStorage
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+  final storage = GetStorage();
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: ColorssA.whiteColor ,
-        statusBarIconBrightness: Brightness.dark,
-      ),
-    );
     return GetMaterialApp(
-      title: 'LOL APP',
       theme: ThemeData(
-        // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primaryColor: Colors.blue, // Set primary color to blue
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.black),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.black, // Set global cursor color to black
+        ),
       ),
       debugShowCheckedModeBanner: false,
-      scrollBehavior: const MaterialScrollBehavior(),
-      initialRoute: RouteHelper.getSplash(),
-      getPages: RouteHelper.routes,
-      defaultTransition: Transition.rightToLeft,
-      transitionDuration: const Duration(milliseconds: 500),
-
-      // home: BottomTapBarScreen(),
+      title: 'Flutter Demo',
+      home: storage.read("userid") == null ? MyLogin() : MyBottombar(),
     );
   }
 }

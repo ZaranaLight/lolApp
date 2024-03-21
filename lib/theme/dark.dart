@@ -15,5 +15,5 @@ ThemeData dark = ThemeData(
   colorScheme: ColorScheme.light(
       primary: Color(0xFF05365B), secondary: Color(0xff80A4BD)),
   textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(primary: Color(0xFF05365B))),
+      style: TextButton.styleFrom(foregroundColor: Color(0xFF05365B))),
 );

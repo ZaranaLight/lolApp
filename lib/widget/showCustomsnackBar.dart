@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lol/utils/dimentions.dart';
-import 'package:lol/utils/sizes.dart';
-import 'package:lol/utils/styles.dart';
-import 'package:lol/widget/customButton.dart';
+import '../Unils/sizes.dart';
+import '../dimentions.dart';
+import '../styles.dart';
+import 'customButton.dart';
 
 void showCustomSnackBar(String message, BuildContext context,
     {bool isError = true}) {
@@ -30,11 +30,11 @@ void showCustomSnackBar(String message, BuildContext context,
 
 showPopUpDialog(String message, BuildContext context,
     {bool isApplyForm = false,
-      bool isSkillPopup = false,
-      isChangePassword = false,
-      VoidCallback? onClickYes,
-      Widget? widgetIcon,
-      VoidCallback? onClickNo}) {
+    bool isSkillPopup = false,
+    isChangePassword = false,
+    VoidCallback? onClickYes,
+    Widget? widgetIcon,
+    VoidCallback? onClickNo}) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -65,13 +65,13 @@ showPopUpDialog(String message, BuildContext context,
                   alignment: Alignment.topRight,
                   child: (isApplyForm == true || isSkillPopup == true)
                       ? IconButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).hintColor,
-                      ))
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: Theme.of(context).hintColor,
+                          ))
                       : Container(),
                 ),
                 SizedBox(
@@ -81,7 +81,7 @@ showPopUpDialog(String message, BuildContext context,
                   children: [
                     Padding(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Text(
                         message,
                         textAlign: TextAlign.center,
@@ -114,7 +114,6 @@ showPopUpDialog(String message, BuildContext context,
                         onClick: onClickNo,
                       ),
                     ),
-
                     if (isChangePassword == true)
                       SizedBox(
                         width: Get.width * 0.04,
@@ -160,12 +159,12 @@ showPopUpDialog(String message, BuildContext context,
 }
 
 showPopUpSellDialog(
-    String message,
-    BuildContext context, {
-      VoidCallback? onClickYes,
-      VoidCallback? onClickNo,
-      TextEditingController? textEditingController,
-    }) {
+  String message,
+  BuildContext context, {
+  VoidCallback? onClickYes,
+  VoidCallback? onClickNo,
+  TextEditingController? textEditingController,
+}) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -206,13 +205,13 @@ showPopUpSellDialog(
                         borderSide: BorderSide(
                             width: 1,
                             color:
-                            Theme.of(context).primaryColor), //<-- SEE HERE
+                                Theme.of(context).primaryColor), //<-- SEE HERE
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                             width: 1,
                             color:
-                            Theme.of(context).primaryColor), //<-- SEE HERE
+                                Theme.of(context).primaryColor), //<-- SEE HERE
                       ),
                     ),
                   ),

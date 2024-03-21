@@ -1,9 +1,10 @@
 import 'dart:io';
-
+import 'dart:math';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:focus_detector/focus_detector.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:lol/constanmt/app_constant.dart';
 import 'package:lol/controller/authController.dart';
@@ -14,6 +15,7 @@ import 'package:lol/utils/images.dart';
 import 'package:lol/utils/styles.dart';
 import 'package:lol/widget/dropDownWidget.dart';
 import 'package:lol/widget/showCustomsnackBar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -352,11 +354,72 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // static const _url = 'https://dosomthings.com/wp-content/uploads/2023/07/How-to-download-and-save-image-to-file-in-FlutterDosomthings.com_-1024x576.png';
+  var random = Random();
+
+  Future<void> _saveImage(BuildContext context,String path) async {
+    print('test-----------------------------------------------');
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    late String message;
+
+    try {
+      // Download image
+      final http.Response response = await http.get(
+          Uri.parse(path));
+
+      // Get temporary directory
+      final dir = await getTemporaryDirectory();
+
+      // Create an image name
+      var filename = '${dir.path}/SaveImage${random.nextInt(100)}.png';
+
+      // Save to filesystem
+      final file = File(filename);
+      await file.writeAsBytes(response.bodyBytes);
+
+      // Ask the user to save it
+      final params = SaveFileDialogParams(sourceFilePath: file.path);
+      final finalPath = await FlutterFileDialog.saveFile(params: params);
+
+      if (finalPath != null) {
+        message = 'Image saved to disk';
+      }
+    } catch (e) {
+      message = e.toString();
+      scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text(
+          message,
+          style:  TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0xFFe91e63),
+      ));
+    }
+
+    if (message != null) {
+
+      scaffoldMessenger.showSnackBar(SnackBar(
+        content: Text(
+          message,
+          style:  TextStyle(
+            fontSize: 12,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0xFFe91e63),
+      ));
+
+    }
+  }
   downloadImage(String path) async {
-    await GallerySaver.saveImage(path).then(
-      (value) => showCustomSnackBar('Image Saved Successfully', context,
-          isError: false),
-    );
+    // await GallerySaver.saveImage(path).then(
+    //   (value) => showCustomSnackBar('Image Saved Successfully', context,
+    //       isError: false),
+    // );
   }
 
   VideoPlayerController? _videoPlayerController;
@@ -503,7 +566,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Spacer(),
                                           IconButton(
                                               onPressed: () {
-                                                downloadImage(
+                                                // downloadImage(
+                                                //     AppConstants.IMAGE_URL +
+                                                //         authController
+                                                //                 .postList[index]
+                                                //             ['file']);
+
+                                                _saveImage(context,
                                                     AppConstants.IMAGE_URL +
                                                         authController
                                                                 .postList[index]

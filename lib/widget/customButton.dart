@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lol/utils/colors.dart';
-import 'package:lol/utils/dimentions.dart';
+
+import '../Color.dart';
+import '../dimentions.dart';
 
 class ButtonWight extends StatelessWidget {
   final String? buttonText;
@@ -15,16 +16,16 @@ class ButtonWight extends StatelessWidget {
   final bool? isReactangle;
   const ButtonWight(
       {key,
-        this.buttonText,
-        this.onClick,
-        this.height,
-        this.width,
-        this.borderButton,
-        this.isReviewButton,
-        this.buttonTextColor,
-        this.loading = false,
-        this.tag,
-        this.isReactangle});
+      this.buttonText,
+      this.onClick,
+      this.height,
+      this.width,
+      this.borderButton,
+      this.isReviewButton,
+      this.buttonTextColor,
+      this.loading = false,
+      this.tag,
+      this.isReactangle});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,8 @@ class ButtonWight extends StatelessWidget {
           decoration: BoxDecoration(
               /*color: borderButton!
                   ? ColorssA.whiteColor
-                  : ColorssA.primaryColor,*/gradient: ColorssA.AppLinears,
+                  : ColorssA.primaryColor,*/
+              gradient: AppLinears,
               border: Border.all(
                 color: Theme.of(context).primaryColor,
 
@@ -50,34 +52,34 @@ class ButtonWight extends StatelessWidget {
           child: Center(
             child: !loading!
                 ? DefaultTextStyle(
-              style: TextStyle(),
-              child: Text(
-                buttonText!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                softWrap: false,
-                style: TextStyle(
-                    fontFamily: 'Metropolis',
-                    decoration: TextDecoration.none,
-                    fontSize: Dimensions
-                        .fontSizeLarge15 /*isReviewButton == true
+                    style: TextStyle(),
+                    child: Text(
+                      buttonText!,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      softWrap: false,
+                      style: TextStyle(
+                          fontFamily: 'Metropolis',
+                          decoration: TextDecoration.none,
+                          fontSize: Dimensions
+                              .fontSizeLarge15 /*isReviewButton == true
                               ? Dimensions.fontSizeLarge15
                               : 17*/
-                    ,
-                    color: /* borderButton!
+                          ,
+                          color: /* borderButton!
                               ? Theme.of(context).hintColor
                               : */
-                    ColorssA.whiteColor,
-                    fontWeight: FontWeight.w700),
-              ),
-            )
+                              whiteColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  )
                 : CircularProgressIndicator(
-              value: null,
-              strokeWidth: 3.0,
-              color: borderButton!
-                  ? Theme.of(context).primaryColor
-                  : Theme.of(context).secondaryHeaderColor,
-            ),
+                    value: null,
+                    strokeWidth: 3.0,
+                    color: borderButton!
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).secondaryHeaderColor,
+                  ),
           ),
         ),
       ),

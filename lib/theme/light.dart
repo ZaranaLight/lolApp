@@ -18,5 +18,5 @@ ThemeData light = ThemeData(
   colorScheme: const ColorScheme.light(
       primary: Color(0xFF05365B), secondary: Color(0xFF05365B)),
   textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(primary: Color(0xFF05365B))),
+      style: TextButton.styleFrom(foregroundColor: Color(0xFF05365B))),
 );
