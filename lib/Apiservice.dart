@@ -1,9 +1,8 @@
 class Apiservice {
   static const String BASE_URL = 'https://joxify.in/api/';
-  // static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
   static const String IMAGE_URL =
-      'https://joxify.in/front/assets/posts/';
-
+      'https://joxify.in/api/front/assets/posts/';
+  // static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
   // static const String IMAGE_URL =
   //     'https://mcq.codingbandar.com/front/assets/posts/';
   static var getAllCategory = "${BASE_URL}getAllCategory";
@@ -11,6 +10,7 @@ class Apiservice {
   static var uploadPost = "${BASE_URL}uploadPost";
   static var updateProfile = "${BASE_URL}updateProfile";
   static var login = "${BASE_URL}login";
+  static var register = "${BASE_URL}register";
   static var getUserById = "${BASE_URL}getUserById";
   static var getProfile = "${BASE_URL}getProfile";
   static var postLike = "${BASE_URL}postLike";

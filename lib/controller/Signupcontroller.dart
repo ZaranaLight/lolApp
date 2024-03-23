@@ -23,11 +23,11 @@ class SignUpController extends GetxController {
 
   //////////////////// register ////////////////////////
 
-  Future<void> register() async {
+  Future<void>  register() async {
     isLoading.value = true;
     try {
       final response = await http.post(
-        Uri.parse('https://mcq.codingbandar.com/api/register'),
+        Uri.parse('https://joxify.in/api/register'),
         body: {
           'email': email.value.text,
           'password': password.value.text,

@@ -12,8 +12,8 @@ class AppConstants {
 
   ///API-----------------------------------------------------------
 
-  static const String BASE_URL = 'https://mcq.codingbandar.com/api/';
-  static const String IMAGE_URL = 'https://mcq.codingbandar.com/front/assets/posts/';
+  static const String BASE_URL = 'https://joxify.in/api/';
+  static const String IMAGE_URL = 'https://joxify.in/front/assets/posts/';
   static const String register = 'register';
   static const String login = 'login';
   static const String update_profile = 'updateProfile';
@@ -22,7 +22,5 @@ class AppConstants {
   static const String uploadPost = 'uploadPost';
   static const String getAllPosts = 'getAllPosts';
 
-
-  // static const String home = 'home';
 
 }

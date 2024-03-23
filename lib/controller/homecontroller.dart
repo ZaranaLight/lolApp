@@ -65,9 +65,13 @@ class Homecontroller extends GetxController {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
+print('postData--------------------');
 
+print(response.body);
         if (responseData['status'] == true) {
           final List<dynamic> postDataList = responseData['data']['data'];
+
+          print('filePAth-------${responseData['file_path']}');
           postimage.value = responseData['file_path'];
           if (isRefresh) {
             postdata.clear();
@@ -328,6 +332,10 @@ class Homecontroller extends GetxController {
   Future<void> fetchCategories() async {
     try {
       var response = await http.post(Uri.parse(Apiservice.getAllCategory));
+      print('getAllCategory--------------');
+      print(Uri.parse(Apiservice.getAllCategory));
+      print(response.body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         dynamic jsonData = jsonDecode(response.body);
         print(response.body);

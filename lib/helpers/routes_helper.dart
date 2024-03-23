@@ -31,9 +31,9 @@ class RouteHelper {
     GetPage(name: splash, page: () => SplashScreen()),
     GetPage(name: signUp, page: () => SignupScreen()),
     GetPage(name: signIn, page: () => SignInScreen()),
-    GetPage(name: home, page: () => HomeScreen()),
-    GetPage(name: dashboard, page: () => BottomNavigationBarApp()),
-    GetPage(name: createPost, page: () => CreatePost()),
-    GetPage(name: profilePage, page: () => ProfilePage()),
+    // GetPage(name: home, page: () => HomeScreen()),
+    // GetPage(name: dashboard, page: () => BottomNavigationBarApp()),
+    // GetPage(name: createPost, page: () => CreatePost()),
+    // GetPage(name: profilePage, page: () => ProfilePage()),
   ];
 }
