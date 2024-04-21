@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lol/Apiservice.dart';
 import 'package:http/http.dart' as http;
 import 'package:lol/Color.dart';
+import 'package:lol/api/responeModel.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import '../Widget/Globelnotsuccess.dart';
 import '../Widget/postmodal.dart';
@@ -16,6 +17,7 @@ class Homecontroller extends GetxController {
   var isTextFieldVisible = false.obs;
   var commentName = TextEditingController().obs;
   final storage = GetStorage();
+
   String get catDropdownvalue => _catDropdownvalue;
   String _catDropdownvalue = 'Select Post Categories';
   var postdata = RxList<Map<String, dynamic>>([]);
@@ -23,6 +25,7 @@ class Homecontroller extends GetxController {
   var postimage = ''.obs;
   var post = TextEditingController().obs;
   RxBool isLoading = false.obs;
+  RxBool isPostLoading = false.obs;
   RxString selectedCategory = ''.obs;
   RxList categories = [].obs;
   var selectedValue = ''.obs; // Initial selected value
@@ -30,6 +33,9 @@ class Homecontroller extends GetxController {
   RxString PostId = ''.obs;
 
   void onRefresh() {
+
+    _pageIndex = 1;
+
     getPostdata(isRefresh: true);
   }
 
@@ -56,44 +62,144 @@ class Homecontroller extends GetxController {
 
   ////////////////  getPostdata  ////////////////
 
-  Future<void> getPostdata({bool isRefresh = false}) async {
-    try {
-      final response = await http.post(
-        Uri.parse(Apiservice.getAllPosts),
-        body: {"userid": storage.read("userid").toString()},
-      );
+  bool _isApplyLoading = false;
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-print('postData--------------------');
+  bool get isApplyLoading => _isApplyLoading;
 
-print(response.body);
-        if (responseData['status'] == true) {
-          final List<dynamic> postDataList = responseData['data']['data'];
+  bool _isLoading = false;
 
-          print('filePAth-------${responseData['file_path']}');
-          postimage.value = responseData['file_path'];
-          if (isRefresh) {
-            postdata.clear();
-          }
-          postdata.assignAll(postDataList.cast<Map<String, dynamic>>());
-          if (isRefresh) {
-            refreshController.refreshCompleted();
-          }
-        } else {
-          print('Failed to getPostdata');
-          throw Exception('Failed to getPostdata');
-        }
-      } else {
-        print('Failed to getPostdata');
-        throw Exception('Failed to getPostdata');
+  bool get isLoadings => _isLoading;
+
+  int get pageIndex => _pageIndex;
+  int _pageIndex = 1;
+
+  final RefreshController postRefreshController =
+      RefreshController(initialRefresh: true);
+
+  bool _isNoMore = false;
+
+  bool get isNoMore => _isNoMore;
+
+  int get totalPage => _totalPage;
+  int _totalPage = 50;
+
+  List<dynamic> get postList => _postList;
+  List<dynamic> _postList = [];
+
+  Future<bool> getPostdata({bool isRefresh = false}) async {
+    print('isRefresh-----${isRefresh}');
+    if (isRefresh && _pageIndex == 0) {
+      _isApplyLoading = true;
+      update();
+    }
+    _isLoading = true;
+    update();
+    if (isRefresh == false && isNoMore == true) {
+      return false;
+    }
+    if (isRefresh) {
+      _pageIndex =1;
+    } else {
+      if (_pageIndex >= _totalPage) {
+        postRefreshController.loadNoData();
+        return false;
       }
-    } catch (error) {
-      print('Error fetching data in getPostdata: $error');
+    }
+    print('URL=======${Apiservice.getAllPosts}?page=$_pageIndex');
+    var url = '${Apiservice.getAllPosts}?page=$_pageIndex';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {"userid": storage.read("userid").toString()},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if(responseData.isEmpty){
+        print('_responseData.isEmpty==========');
+        print(responseData.isEmpty);
+        _isNoMore = true;
+        update();
+        return false;
+      }
+      if (_pageIndex==1&& isRefresh) {
+
+        print('_postList===_postList==========');
+        _postList = await responseData['data']['data'];
+        _isApplyLoading = false;
+        update();
+      } else {
+        print('blabla=============');
+
+
+        print(responseData['data']['data'].length);
+        List temp = responseData['data']['data'];
+        for (int i = 0; i < temp.length; i++) {
+          if (!_postList.contains(temp[i]['id'])) {
+            _postList.addAll(temp);
+            break;
+          }
+        }
+      }
+      print('_pageIndex=============${_pageIndex}');
+      print('_totalPage=============${_totalPage}');
+      print('_totalPage=============${_postList.length}');
+      _pageIndex++;
+      _totalPage = 50;
+
+      if (response.body.isEmpty) {
+        _isNoMore = true;
+        update();
+        return false;
+      }
+      _isLoading = false;
+      update();
+      return true;
+    } else {
+      print('Failed to getPostdata');
+
+      throw Exception('Failed to getPostdata');
     }
   }
 
-  ////////////////  getcommentdata  ////////////////
+  // Future<void> getPostdata({bool isRefresh = false}) async {
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse(Apiservice.getAllPosts),
+  //       body: {"userid": storage.read("userid").toString()},
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> responseData = json.decode(response.body);
+  //
+  //       if (responseData['status'] == true) {
+  //         print('---currentPAge----');
+  //         print(responseData['data']['current_page']);
+  //         var currentPage = responseData['data']['current_page'];
+  //         final List<dynamic> postDataList = responseData['data']['data'];
+  //
+  //         postimage.value = responseData['file_path'];
+  //         if (isRefresh) {
+  //           postdata.clear();
+  //         }
+  //         postdata.assignAll(postDataList.cast<Map<String, dynamic>>());
+  //         if (isRefresh) {
+  //           refreshController.refreshCompleted();
+  //         }
+  //         currentPage=currentPage+1;
+  //       } else {
+  //         print('Failed to getPostdata');
+  //         throw Exception('Failed to getPostdata');
+  //       }
+  //     } else {
+  //       print('Failed to getPostdata');
+  //       throw Exception('Failed to getPostdata');
+  //     }
+  //   } catch (error) {
+  //     print('Error fetching data in getPostdata: $error');
+  //   }
+  // }
+
+  //////////////  getcommentdata  ////////////////
 
   Future<void> getcommentdata(String postid) async {
     try {
@@ -223,7 +329,12 @@ print(response.body);
 
   void postLike(String postid, String toid) async {
     isLoading.value = true;
+    print('likeb---------');
+    print(storage.read("userid").toString());
     try {
+      print(
+          'response.statusCode--${postid}--${storage.read("userid").toString()}---${toid}');
+      print('rApiservice.postLikee--${Apiservice.postLike}');
       final response = await http.post(
         Uri.parse(Apiservice.postLike),
         body: {
@@ -235,6 +346,7 @@ print(response.body);
       print(
         storage.read("userid").toString(),
       );
+      print('response.statusCode--${json.decode(response.body)}');
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = json.decode(response.body);
 

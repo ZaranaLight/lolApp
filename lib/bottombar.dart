@@ -16,6 +16,7 @@ class MyBottombar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: PageView(
+          physics: NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: [
             MyHome(),
@@ -25,7 +26,7 @@ class MyBottombar extends StatelessWidget {
           onPageChanged: (index) {
             _selectedIndex.value = index;
             if (index == 0) {
-              homecontroller.getPostdata();
+              // homecontroller.getPostdata();
             } else if (index == 2) {
               profileController.getUserId();
             }
@@ -40,7 +41,7 @@ class MyBottombar extends StatelessWidget {
             onTap: (index) {
               _selectedIndex.value = index;
               if (index == 0) {
-                homecontroller.getPostdata();
+                // homecontroller.getPostdata();
               } else if (index == 2) {
                 profileController.getUserId();
               }

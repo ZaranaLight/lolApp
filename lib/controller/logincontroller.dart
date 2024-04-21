@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Apiservice.dart';
 import '../Widget/Globelnotsuccess.dart';
 import '../bottombar.dart';
@@ -39,13 +40,14 @@ class LoginController extends GetxController {
           'password': password.value.text,
         },
       );
-print('responseCode----------${response.statusCode}');
+
       if (response.statusCode == 200) {
         Map<String, dynamic> map = json.decode(response.body);
 
         if (map['status'] == true) {
           final data = jsonDecode(response.body);
           var item = data['data'];
+
           storage.write("userid", item['id']);
           storage.write("profile", item['profile']);
           storage.write("username", item['name'] ?? '');
