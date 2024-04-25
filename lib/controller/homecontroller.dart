@@ -6,9 +6,10 @@ import 'package:lol/Apiservice.dart';
 import 'package:http/http.dart' as http;
 import 'package:lol/Color.dart';
 import 'package:lol/api/responeModel.dart';
+import 'package:lol/localDatabse/sqlDatabase.dart';
+import 'package:lol/widget/Globelnotsuccess.dart';
+import 'package:lol/widget/postmodal.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import '../Widget/Globelnotsuccess.dart';
-import '../Widget/postmodal.dart';
 
 class Homecontroller extends GetxController {
   RefreshController refreshController =
@@ -139,7 +140,28 @@ class Homecontroller extends GetxController {
             break;
           }
         }
+        DBHelper dbHelper = DBHelper();
+        var sdf = dbHelper.getTodos();
+        sdf.then((value) async{
+          print('value================123${temp}');
+          if(value.isEmpty){
+            print('insertTodo================123${jsonEncode(postList)}');
+            await dbHelper.insertTodo({
+              'data': jsonEncode(postList)
+            });
+          }else{
+            print('updateTodo================123${value}');
+            // await dbHelper.updateTodo({
+            //   'data': userDetails
+            // });
+            await dbHelper.updateTodo({
+              'data': jsonEncode(postList)
+            });
+          }
+
+        });
       }
+      print('check------------------');
       print('_pageIndex=============${_pageIndex}');
       print('_totalPage=============${_totalPage}');
       print('_totalPage=============${_postList.length}');

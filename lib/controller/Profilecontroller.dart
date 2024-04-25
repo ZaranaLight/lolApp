@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:lol/widget/Globelnotsuccess.dart';
+import 'package:lol/widget/globalsuccess.dart';
 import '../Apiservice.dart';
-import '../Widget/Globelnotsuccess.dart';
-import '../Widget/globalsuccess.dart';
 import 'postcontroller.dart';
 
 class ProfileController extends GetxController {

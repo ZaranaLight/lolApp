@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lol/widget/Globelnotsuccess.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Apiservice.dart';
-import '../Widget/Globelnotsuccess.dart';
 import '../bottombar.dart';
 import 'homecontroller.dart';
 

@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'Color.dart';
-import 'Widget/mydropdown.dart';
-import 'Widget/postmodal.dart';
 import 'controller/postcontroller.dart';
 
 class MyPost extends StatelessWidget {

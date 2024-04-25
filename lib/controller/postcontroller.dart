@@ -5,11 +5,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lol/widget/Globelnotsuccess.dart';
+import 'package:lol/widget/globalsuccess.dart';
+import 'package:lol/widget/postmodal.dart';
 import '../Apiservice.dart';
 import '../Color.dart';
-import '../Widget/Globelnotsuccess.dart';
-import '../Widget/globalsuccess.dart';
-import '../Widget/postmodal.dart';
 
 class PostController extends GetxController {
   List<String> selectedPaths = [];
