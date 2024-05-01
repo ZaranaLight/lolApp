@@ -127,7 +127,7 @@ class MySignUp extends StatelessWidget {
                           ),
                           child: MaterialButton(
                             onPressed: () {
-                              homecontroller.getPostdata();
+                              // homecontroller.getPostdata(isRefresh: true);
                               signUpController.register();
                             },
                             shape: RoundedRectangleBorder(

@@ -21,7 +21,8 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    homecontroller.getPostdata();
+    // homecontroller.getPostdata(isRefresh: true);
+
   }
 
   void togglePasswordVisibility() {

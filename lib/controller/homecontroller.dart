@@ -36,6 +36,7 @@ class Homecontroller extends GetxController {
   void onRefresh() {
 
     _pageIndex = 1;
+    print('============1============');
 
     getPostdata(isRefresh: true);
   }
@@ -51,14 +52,19 @@ class Homecontroller extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await getPostdata();
+    print('============2============');
+    await     getPostdata(isRefresh: true);
+
   }
 
   @override
   void onReady() async {
     super.onReady();
     await fetchCategories();
-    await getPostdata();
+    print('============3============');
+
+    // await     getPostdata(isRefresh: true);
+
   }
 
   ////////////////  getPostdata  ////////////////
@@ -133,33 +139,33 @@ class Homecontroller extends GetxController {
 
 
         print(responseData['data']['data'].length);
-        List temp = responseData['data']['data'];
+        List temp = responseData['data']['data'].shuffle();
         for (int i = 0; i < temp.length; i++) {
           if (!_postList.contains(temp[i]['id'])) {
             _postList.addAll(temp);
             break;
           }
         }
-        DBHelper dbHelper = DBHelper();
-        var sdf = dbHelper.getTodos();
-        sdf.then((value) async{
-          print('value================123${temp}');
-          if(value.isEmpty){
-            print('insertTodo================123${jsonEncode(postList)}');
-            await dbHelper.insertTodo({
-              'data': jsonEncode(postList)
-            });
-          }else{
-            print('updateTodo================123${value}');
-            // await dbHelper.updateTodo({
-            //   'data': userDetails
-            // });
-            await dbHelper.updateTodo({
-              'data': jsonEncode(postList)
-            });
-          }
-
-        });
+        // DBHelper dbHelper = DBHelper();
+        // var sdf = dbHelper.getTodos();
+        // sdf.then((value) async{
+        //   print('value================123${temp}');
+        //   if(value.isEmpty){
+        //     print('insertTodo================123${jsonEncode(postList)}');
+        //     await dbHelper.insertTodo({
+        //       'data': jsonEncode(postList)
+        //     });
+        //   }else{
+        //     print('updateTodo================123${value[0]['data']}');
+        //     // await dbHelper.updateTodo({
+        //     //   'data': userDetails
+        //     // });
+        //     await dbHelper.updateTodo({
+        //       'data': jsonEncode(postList)
+        //     });
+        //   }
+        //
+        // });
       }
       print('check------------------');
       print('_pageIndex=============${_pageIndex}');
@@ -182,46 +188,46 @@ class Homecontroller extends GetxController {
       throw Exception('Failed to getPostdata');
     }
   }
+///
+//   Future<void> getPostdata({bool isRefresh = false}) async {
+//     try {
+//       final response = await http.post(
+//         Uri.parse(Apiservice.getAllPosts),
+//         body: {"userid": storage.read("userid").toString()},
+//       );
+//
+//       if (response.statusCode == 200) {
+//         final Map<String, dynamic> responseData = json.decode(response.body);
+//
+//         if (responseData['status'] == true) {
+//           print('---currentPAge----');
+//           print(responseData['data']['current_page']);
+//           var currentPage = responseData['data']['current_page'];
+//           final List<dynamic> postDataList = responseData['data']['data'];
+//
+//           postimage.value = responseData['file_path'];
+//           if (isRefresh) {
+//             postdata.clear();
+//           }
+//           postdata.assignAll(postDataList.cast<Map<String, dynamic>>());
+//           if (isRefresh) {
+//             refreshController.refreshCompleted();
+//           }
+//           currentPage=currentPage+1;
+//         } else {
+//           print('Failed to getPostdata');
+//           throw Exception('Failed to getPostdata');
+//         }
+//       } else {
+//         print('Failed to getPostdata');
+//         throw Exception('Failed to getPostdata');
+//       }
+//     } catch (error) {
+//       print('Error fetching data in getPostdata: $error');
+//     }
+//   }
 
-  // Future<void> getPostdata({bool isRefresh = false}) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse(Apiservice.getAllPosts),
-  //       body: {"userid": storage.read("userid").toString()},
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> responseData = json.decode(response.body);
-  //
-  //       if (responseData['status'] == true) {
-  //         print('---currentPAge----');
-  //         print(responseData['data']['current_page']);
-  //         var currentPage = responseData['data']['current_page'];
-  //         final List<dynamic> postDataList = responseData['data']['data'];
-  //
-  //         postimage.value = responseData['file_path'];
-  //         if (isRefresh) {
-  //           postdata.clear();
-  //         }
-  //         postdata.assignAll(postDataList.cast<Map<String, dynamic>>());
-  //         if (isRefresh) {
-  //           refreshController.refreshCompleted();
-  //         }
-  //         currentPage=currentPage+1;
-  //       } else {
-  //         print('Failed to getPostdata');
-  //         throw Exception('Failed to getPostdata');
-  //       }
-  //     } else {
-  //       print('Failed to getPostdata');
-  //       throw Exception('Failed to getPostdata');
-  //     }
-  //   } catch (error) {
-  //     print('Error fetching data in getPostdata: $error');
-  //   }
-  // }
-
-  //////////////  getcommentdata  ////////////////
+  ////////////  getcommentdata  ////////////////
 
   Future<void> getcommentdata(String postid) async {
     try {
@@ -374,6 +380,8 @@ class Homecontroller extends GetxController {
 
         if (responseData['status'] == true) {
           print("success");
+          print('============4============');
+
           getPostdata();
         } else {
           errorDialog("Already Liked!", "ok");
@@ -412,6 +420,8 @@ class Homecontroller extends GetxController {
         if (responseData['status'] == true) {
           commentName.value.text = '';
           Get.back();
+          print('============5============');
+
           getPostdata();
           print("success");
         } else {
@@ -447,6 +457,8 @@ class Homecontroller extends GetxController {
         final Map<String, dynamic> responseData = json.decode(response.body);
 
         if (responseData['status'] == true) {
+          print('============6============');
+
           getPostdata();
         } else {
           print('Failed to load data');
