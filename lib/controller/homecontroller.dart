@@ -10,6 +10,7 @@ import 'package:lol/localDatabse/sqlDatabase.dart';
 import 'package:lol/widget/Globelnotsuccess.dart';
 import 'package:lol/widget/postmodal.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Homecontroller extends GetxController {
   RefreshController refreshController =
@@ -138,6 +139,8 @@ class Homecontroller extends GetxController {
         print('blabla=============');
 
 
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        
         print(responseData['data']['data'].length);
         List temp = responseData['data']['data'].shuffle();
         for (int i = 0; i < temp.length; i++) {
@@ -146,6 +149,8 @@ class Homecontroller extends GetxController {
             break;
           }
         }
+        prefs.setString('offline_post_data', jsonEncode(_postList.toString()));
+        
         // DBHelper dbHelper = DBHelper();
         // var sdf = dbHelper.getTodos();
         // sdf.then((value) async{
