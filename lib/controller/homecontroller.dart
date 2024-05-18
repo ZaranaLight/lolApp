@@ -995,38 +995,20 @@ class Homecontroller extends GetxController {
         print('blabla=============');
 
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+
         
         print(responseData['data']['data'].length);
-        List temp = responseData['data']['data'].shuffle();
+        print('test=========================================1');
+        print(responseData['data']['data']);
+        List temp = responseData['data']['data'];
+
+        print('temp==========${temp}');
         for (int i = 0; i < temp.length; i++) {
           if (!_postList.contains(temp[i]['id'])) {
             _postList.addAll(temp);
             break;
           }
         }
-
-        
-        // DBHelper dbHelper = DBHelper();
-        // var sdf = dbHelper.getTodos();
-        // sdf.then((value) async{
-        //   print('value================123${temp}');
-        //   if(value.isEmpty){
-        //     print('insertTodo================123${jsonEncode(postList)}');
-        //     await dbHelper.insertTodo({
-        //       'data': jsonEncode(postList)
-        //     });
-        //   }else{
-        //     print('updateTodo================123${value[0]['data']}');
-        //     // await dbHelper.updateTodo({
-        //     //   'data': userDetails
-        //     // });
-        //     await dbHelper.updateTodo({
-        //       'data': jsonEncode(postList)
-        //     });
-        //   }
-        //
-        // });
       }
       print('check------------------');
       print('_pageIndex=============${_pageIndex}');

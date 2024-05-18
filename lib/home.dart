@@ -894,13 +894,7 @@ class _MyHomeState extends State<MyHome> {
                   ),
                 );
               } else if (result == ConnectivityResult.wifi) {
-                print(
-                    ' homecontroller.postList===${homecontroller.offlinePost}');
-
-
                 return
-
-                  ///
                 SafeArea(
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 15),
