@@ -950,6 +950,15 @@ class Homecontroller extends GetxController {
     },
   ];
 
+
+  bool _offlineInternet = false;
+
+  bool get  offlineInternet => _offlineInternet;
+  setOfflineStatus(bool newVal)async{
+    _offlineInternet = newVal;
+    update();
+  }
+
   Future<bool> getPostdata({bool isRefresh = false}) async {
     print('isRefresh-----${isRefresh}');
     if (isRefresh && _pageIndex == 0) {
