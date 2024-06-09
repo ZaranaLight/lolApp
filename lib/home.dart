@@ -37,8 +37,9 @@ class _MyHomeState extends State<MyHome> {
 var home = Get.find<Homecontroller>();
   Future<void> _checkInternetAndNavigate() async {
     final result = await Connectivity().checkConnectivity();
-    print('result===========${result}');
+
     if (result == ConnectivityResult.none) {
+      home.offlinePost.shuffle();
       // Get.offAll(() => const NoInternetScreen());
       setState(() {
         home.setOfflineStatus(true);
@@ -54,6 +55,9 @@ var home = Get.find<Homecontroller>();
     super.initState();
      dbHelper.initDB();
     _checkInternetAndNavigate();
+    if(home.postList.isNotEmpty){
+      home.postList.shuffle();
+    }
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
         setState(() {
@@ -976,6 +980,19 @@ dynamic temp;
                                                                       height:
                                                                           Get.height *
                                                                               0.27,
+                                                        errorBuilder: (BuildContext context,
+                                                            Object exception, StackTrace? stackTrace) {
+                                                          return Image.asset(
+                                                            homecontroller.offlinePost[0]['file'],
+                                                            width: Get
+                                                                .width,
+                                                            fit: BoxFit
+                                                                .cover,
+                                                            height:
+                                                            Get.height *
+                                                                0.27,
+                                                          );
+                                                        },
                                                                     )
                                                           : Container()),
                                                 ),
