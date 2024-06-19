@@ -998,6 +998,7 @@ class Homecontroller extends GetxController {
 
         print('_postList===_postList==========');
         _postList = await responseData['data']['data'];
+        _postList.shuffle();
         _isApplyLoading = false;
         update();
       } else {

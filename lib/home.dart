@@ -55,6 +55,7 @@ var home = Get.find<Homecontroller>();
     super.initState();
      dbHelper.initDB();
     _checkInternetAndNavigate();
+
     if(home.postList.isNotEmpty){
       home.postList.shuffle();
     }
