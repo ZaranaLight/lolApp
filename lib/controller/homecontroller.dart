@@ -959,6 +959,8 @@ class Homecontroller extends GetxController {
     update();
   }
 
+
+
   Future<bool> getPostdata({bool isRefresh = false}) async {
     print('isRefresh-----${isRefresh}');
     if (isRefresh && _pageIndex == 0) {
@@ -1357,5 +1359,6 @@ class Homecontroller extends GetxController {
 
   void setSelectedCategory(String category) {
     selectedCategory.value = category;
+    update();
   }
 }

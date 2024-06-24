@@ -102,10 +102,28 @@ var home = Get.find<Homecontroller>();
     keepScrollOffset: true,
   );
 dynamic temp;
+dynamic selCat;
+List postLi = [];
+
+    filterProductsByPrice( ) {
+    setState(() {
+      // Use the 'where' method to filter products by price
+
+      postLi = home.postList
+          .where((product) =>
+      product['category_name']==home.selectedCategory.value)
+          .toList();
+      print('postLi=====${postLi}');
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     final FocusNode focusNode = FocusNode();
     return GetBuilder<Homecontroller>(builder: (homecontroller) {
+
       return Scaffold(
           body: FocusDetector(
             onFocusGained: ()async{
@@ -145,6 +163,10 @@ dynamic temp;
                             style: TextStyle(color: whiteColor),
                           ),
                           onChanged: (newValue) {
+
+                            print('newValue.toString()=1==${newValue.toString()}');
+                            filterProductsByPrice( );
+
                             homecontroller.setSelectedCategory(newValue.toString());
                             homecontroller.searchdata();
                           },
@@ -154,6 +176,7 @@ dynamic temp;
                               Map<String, dynamic> categoryData = category as Map<
                                   String,
                                   dynamic>; // Cast category to Map<String, dynamic>
+                              print('categoryData====${categoryData}');
                               return DropdownMenuItem<String>(
                                 value: categoryData['category_name'],
                                 child: Text(
@@ -627,6 +650,9 @@ dynamic temp;
                                   style: TextStyle(color: whiteColor),
                                 ),
                                 onChanged: (newValue) {
+                                  print('newValue.toString()2===${newValue.toString()}');
+                                  filterProductsByPrice( );
+
                                   homecontroller
                                       .setSelectedCategory(newValue.toString());
                                   homecontroller.searchdata();
@@ -670,6 +696,9 @@ dynamic temp;
                                           homecontroller.postRefreshController,
                                       enablePullUp: true,
                                       onRefresh: () async {
+                                        if(home.postList.isNotEmpty){
+                                          home.postList.shuffle();
+                                        }
                                         dynamic result;
                                         if (homecontroller.pageIndex == 0 &&
                                             homecontroller.postList.isEmpty) {
@@ -1436,6 +1465,9 @@ dynamic temp;
                                   style: TextStyle(color: whiteColor),
                                 ),
                                 onChanged: (newValue) {
+                                  print('newValue.toString()3===${newValue.toString()}');
+                                  filterProductsByPrice( );
+
                                   homecontroller.setSelectedCategory(newValue.toString());
                                   homecontroller.searchdata();
                                 },
@@ -2167,6 +2199,10 @@ dynamic temp;
                                     style: TextStyle(color: whiteColor),
                                   ),
                                   onChanged: (newValue) {
+
+                                    print('newValue.toString()4===${newValue.toString()}');
+                                    filterProductsByPrice( );
+
                                     homecontroller.setSelectedCategory(newValue.toString());
                                     homecontroller.searchdata();
                                   },
