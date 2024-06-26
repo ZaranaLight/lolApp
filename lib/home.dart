@@ -696,6 +696,7 @@ List postLi = [];
                                           homecontroller.postRefreshController,
                                       enablePullUp: true,
                                       onRefresh: () async {
+                                        print('hello zarana');
                                         if(home.postList.isNotEmpty){
                                           home.postList.shuffle();
                                         }
@@ -1507,6 +1508,13 @@ List postLi = [];
                                 controller: homecontroller.postRefreshController,
                                 enablePullUp: true,
                                 onRefresh: () async {
+
+                                  if(home.postList.isNotEmpty){
+                                    home.postList.shuffle();
+                                    setState(() {
+
+                                    });
+                                  }
                                   dynamic result;
                                   if (homecontroller.pageIndex == 0 &&
                                       homecontroller.postList.isEmpty) {
